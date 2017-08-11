@@ -1,6 +1,5 @@
 #include <vector>
 #include <iostream>
-#include "funciones.h"
 #include "ITGO.h"
 
 using namespace std;
@@ -35,10 +34,11 @@ void algoritmoITGO(int tam){
 
 /*A continuacion se pondran los metodos de los 4 tipos de celulas*/
 void crecimientoPCell(PCells, gc, fes, beta, max_gc){
-
+    Celulas = bestPCell, newPCell;
     for(int i=0; i<PCells.size(); i++){
         for(int j=0; j<1000; j++){ 
-            //newPCells(i,j)=PCells(i,j)+alpha*levy(lamda)
+            newPCells(i,j)=PCells(i,j)+alpha(fes, max_fes)*levy(lamda);
+
         }
         //calculamos la evaluacion de fitness de newpcell
         fes++;

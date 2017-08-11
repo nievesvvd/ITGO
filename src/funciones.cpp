@@ -3,3 +3,9 @@
 #include "funciones.h"
 
 
+double alpha(double fes, double max_fes){
+    
+}
+double levy(double lamda){
+
+}
