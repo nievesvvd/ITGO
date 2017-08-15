@@ -4,7 +4,7 @@
 
 
 double alpha(double fes, double max_fes){
-    
+    return (fes/max_fes);
 }
 double levy(double lamda){
 

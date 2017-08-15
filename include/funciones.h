@@ -1,8 +1,10 @@
 #ifndef FUNCIONES_H
 #define FUNCIONES_H
 
+#include <vector.h>
+#include "random_ppio.h"
 
-
+using namespace std;
 
 void generarPoblacion();
 void ordenarPoblacion(vector<Celulas> &poblacionIni);
