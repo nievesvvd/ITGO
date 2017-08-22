@@ -6,13 +6,16 @@
 
 using namespace std;
 
-void generarPoblacion();
+vector <Celulas> generarPoblacion(int tam);
 void ordenarPoblacion(vector<Celulas> &poblacionIni);
-void separarPoblacion(vector<Celulas> &PCells, vector<Celulas> &QCells, vector<Celulas> &DCells);
+void separarPoblacion(vector<Celulas> poblacionIni, vector<Celulas> &PCells, vector<Celulas> &QCells, vector<Celulas> &DCells);
+void actualizarPoblacion(vector<Celulas> &poblacionIni, vector<Celulas> PCells, vector<Celulas> QCells, vector<Celulas> DCells);
+vector <Celulas> distanciaEuclidea(vector <Celulas> QCells, Celulas cell);
 
-double fitness();
+double fitness(Celula cell);
+double mediaFitness(vector <Celulas> DCells);
 double alpha(double fes, double max_fes);
-double levy(double lamda);
+double levy(double beta);
 
 
 
