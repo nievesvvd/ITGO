@@ -6,11 +6,12 @@ using namespace std;
 
 
 Celulas algoritmoITGO(double beta, int Dist, int tam, double max_fes){
-    vector<Celulas> PCells;
-    vector<Celulas> QCells,
-    vector<Celulas> DCells;
-    vector<Celulas> poblacionIni;
-    vector<Celulas> hCells, cPCells;
+    vector<Celulas> PCells; //vector con las PCells
+    vector<Celulas> QCells, //vector con las QCells
+    vector<Celulas> DCells; //vector con las DCells
+    vector<Celulas> poblacionIni;   //vector con la poblacion inicial
+    vector<Celulas> cPCells;
+    vector<vector<Historico> > hCells;  //matriz que guarda el historico de cada celula donde la primera columna tiene a la poblacion y las filas las mejores pos de cada celula
     Celulas bestCell, actualCell;
     int iter_act=0, iteraciones=30000;
     double fes=0.0;

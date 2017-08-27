@@ -7,6 +7,7 @@
 using namespace std;
 
 vector <Celulas> generarPoblacion(int tam);
+//ordenamos la poblacion de forma ascendente con respecto a la cantidad de nutrientes D/Q/P
 void ordenarPoblacion(vector<Celulas> &poblacionIni);
 void separarPoblacion(vector<Celulas> poblacionIni, vector<Celulas> &PCells, vector<Celulas> &QCells, vector<Celulas> &DCells);
 void actualizarPoblacion(vector<Celulas> &poblacionIni, vector<Celulas> PCells, vector<Celulas> QCells, vector<Celulas> DCells);
