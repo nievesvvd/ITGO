@@ -2,6 +2,7 @@
 #define FUNCIONES_H
 
 #include <vector.h>
+#include <algorithm>    // std::random_shuffle
 #include "random_ppio.h"
 
 using namespace std;
@@ -11,7 +12,7 @@ vector <Celulas> generarPoblacion(int tam);
 void ordenarPoblacion(vector<Celulas> &poblacionIni);
 void separarPoblacion(vector<Celulas> poblacionIni, vector<Celulas> &PCells, vector<Celulas> &QCells, vector<Celulas> &DCells);
 void actualizarPoblacion(vector<Celulas> &poblacionIni, vector<Celulas> PCells, vector<Celulas> QCells, vector<Celulas> DCells);
-vector <Celulas> distanciaEuclidea(vector <Celulas> QCells, Celulas cell);
+//vector <Celulas> distanciaEuclidea(vector <Celulas> QCells, Celulas cell); cogemos dos cell aleatorias mejor
 
 double fitness(Celula cell);
 double mediaFitness(vector <Celulas> DCells);

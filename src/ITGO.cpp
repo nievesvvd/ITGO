@@ -5,20 +5,23 @@
 using namespace std;
 
 
-Celulas algoritmoITGO(double beta, int Dist, int tam, double max_fes){
-    vector<Celulas> PCells; //vector con las PCells
-    vector<Celulas> QCells, //vector con las QCells
-    vector<Celulas> DCells; //vector con las DCells
-    vector<Celulas> poblacionIni;   //vector con la poblacion inicial
-    vector<Celulas> cPCells;
+Celulas algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
+    vector<int> PCells;         //vector con los id de las PCells
+    vector<int> QCells,         //vector con los id de las QCells
+    vector<int> DCells;         //vector con los id de las DCells
+    vector<vector<int> > poblacionIni;   //vector con la poblacion inicial
+    vector<vector<int> > besPost;
     vector<vector<Historico> > hCells;  //matriz que guarda el historico de cada celula donde la primera columna tiene a la poblacion y las filas las mejores pos de cada celula
-    Celulas bestCell, actualCell;
-    int iter_act=0, iteraciones=30000;
-    double fes=0.0;
-    double max_Gc=0.7*tam;
+    int bestCell;//guarda el id de la mejor celula
+    int fes=0;
+    int max_Gc=0.7*dim;
     //generamos una poblacion de forma aleatoria dado un tam determinado
-    pobacionIni = generarPoblacion(tam);
-    fes+=poblacionIni.size();
+    
+    //pobacionIni = generarPoblacion(tam);
+    //fes+=poblacionIni.size();
+    
+
+
 
     while(fes<max_fes /*& iter_act > iteraciones*/){
         //ordenamos la poblacion en funcion del valor de fitness(ascending)
@@ -50,7 +53,7 @@ vector<Celulas> crecimientoPCell(hCells, PCells, gc, fes, beta, max_Gc){
     vector<Celulas> hPCells, cPCells;
     vector<Celulas> newPCells;
     for(int i=0; i<PCells.size(); i++){
-        for(int j=0; j<Dist; j++){ 
+        for(int j=0; j<dim; j++){ 
             newPCells[i,j]=PCells[i,j]+alpha(fes, max_fes)*levy(beta);
         }
         //calculamos la evaluacion de fitness de newpcell
@@ -87,7 +90,7 @@ void crecimientoQCell(hPcells, cPCells, QCells, prolCells, gc, fes, beta, max_Gc
     for(int i=0; i<QCells.size(), i++){
         posCell= Randint(0, QCells.size()-1);
         //seleccionar x celula de donde sea
-        cercanas = distanciaEuclidea(QCells, QCells[i]);//devolver posicion o celula????
+        cercanas = disstanciaEuclidea(QCells, QCells[i]);//devolver posicion o celula????
         proxima1 = cercanas[0];
         proxima2 = cercanas[1];
         //levy flight 
@@ -95,7 +98,7 @@ void crecimientoQCell(hPcells, cPCells, QCells, prolCells, gc, fes, beta, max_Gc
 
         //movimiento de la celula, ira a pcell o qcell teniendo en cuenta que x e y son las vecinas
         //formulae 9 and 11 para el movimiento y Beta vvvv
-        for(j=0; j<Dist; j++){
+        for(j=0; j<dim; j++){
             value = Rand();
             if (value < 0.5){
                 newQCell = QCells[i,j]+b*step*(hPCells[p,j]-QCells[i,j])+b*step*(QCells[x,j]-QCells[y,j]);
@@ -107,7 +110,7 @@ void crecimientoQCell(hPcells, cPCells, QCells, prolCells, gc, fes, beta, max_Gc
         }
 
         //vemos si la celula mutara o no
-        for(int k=0; k<Dist; k++){
+        for(int k=0; k<dim; k++){
             value=Rand();
             if(value < exp(fes/max_fes -1)){
                 newQCell[i,k]=QCells[i,k];
