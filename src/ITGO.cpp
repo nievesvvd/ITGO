@@ -5,37 +5,43 @@
 using namespace std;
 
 
-Celulas algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
-    vector<int> PCells;         //vector con los id de las PCells
-    vector<int> QCells,         //vector con los id de las QCells
-    vector<int> DCells;         //vector con los id de las DCells
-    vector<vector<int> > poblacionIni;   //vector con la poblacion inicial
-    vector<vector<int> > besPost;
-    vector<vector<Historico> > hCells;  //matriz que guarda el historico de cada celula donde la primera columna tiene a la poblacion y las filas las mejores pos de cada celula
-    int bestCell;//guarda el id de la mejor celula
+vector<int> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
+    int PCells=tamPob*0.2;         //vector con los id de las PCells
+    int QCells=tamPob*0.6;         //vector con los id de las QCells
+    int DCells=tamPob*0.2;         //vector con los id de las DCells
+    vector<vector<int> > poblacionIni;   //vector con la poblacion inicial donde la 1 pos id cell y la 2 pos nutrientes
+    vector<vector<int> > hCells; //mejor pos //matriz que guarda el historico de cada celula donde la primera columna tiene a la poblacion y las filas las mejores pos de cada celula
+    vector<vector<int> > cCells; //pos actul //matriz que guarda el historico de cada celula donde la primera columna tiene a la poblacion y las filas las mejores pos de cada celula
+    int bestCell, actualCell;//guarda el id de la mejor celula
     int fes=0;
     int max_Gc=0.7*dim;
+
+    PCells.resize(tamPob*0.2);
+    QCells.resize(tamPob*0.6);
+    DCells.resize(tamPob*0.2);
+
+
     //generamos una poblacion de forma aleatoria dado un tam determinado
-    
-    //pobacionIni = generarPoblacion(tam);
-    //fes+=poblacionIni.size();
-    
-
-
+    pobacionIni = generarPoblacion(tam);//el fitness buscamos el minimo posible
 
     while(fes<max_fes /*& iter_act > iteraciones*/){
         //ordenamos la poblacion en funcion del valor de fitness(ascending)
-        ordenarPoblacion(poblacionIni);
-        separarPoblacion(poblacionIni, PCells, QCells, DCells);
+        ordenarPoblacion(poblacionIni);//ordenamos por el fitness
+        separarPoblacion(poblacionIni, PCells, QCells, DCells);//20/60/20
         //pasos de algoritmo
-        cPCells = crecimientoPCell(hCells, PCells, gc, fes, beta, max_Gc);//20%
+        crecimientoPCell(poblacionIni, hCells, PCells, gc, fes, beta, max_Gc);//20%
         crecimientoQCell(hPcells, cPCells, QCells, prolCells, gc, fes, beta, max_Gc);//60%
         crecimientoDCell(cPCells, prolCells, QCells, DCells, gc, fes, max_Gc); //20%
         cellInvasivas(PCells, DCells);        
         //establecemos la mejor celula
+        actualCell=mejorCelula(PCell);
+        if(actualCell < bestCell){
+            bestCell=actualCell;
+        }
         actualizarPoblacion(poblacionIni, PCells, QCells, DCells);
+        fes++;
     }
-    //return the global best cell in population
+    return poblacionIni[bestCell[0]];
 }
 
 /*A continuacion se pondran los metodos de los 4 tipos de celulas*/
@@ -47,30 +53,14 @@ Celulas algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
 **  beta parametro de levy
 **  Max_Gc es el valor de crecimiento maximo de la celula
 **/
-vector<Celulas> crecimientoPCell(hCells, PCells, gc, fes, beta, max_Gc){
-    Celulas = bestPCell;
-    vector<vector<Celulas> > posProliferativas;
-    vector<Celulas> hPCells, cPCells;
-    vector<Celulas> newPCells;
-    for(int i=0; i<PCells.size(); i++){
-        for(int j=0; j<dim; j++){ 
-            newPCells[i,j]=PCells[i,j]+alpha(fes, max_fes)*levy(beta);
+vector<Celulas> crecimientoPCell(poblacionIni, hCells, PCells, gc, fes, beta, max_Gc){
+    double step=0.0;
+    for(int i=0; i<PCells; i++){
+        for(int j=2; j<poblacionIni[0].size(); j++){
+            step = stepLong();
+            poblacionIni[i][j] = poblacionIni[i][j]+alpha()*levy(step)
         }
-        //calculamos la evaluacion de fitness de newpcell
-        fitness(newPCells[i]);
-        fes++;
-        //si el valor de fitness de la nueva cell es mejor, lo guardamos en el vector de sub prof cell popul
-        if (newPCells.nutrientes[i] > bestPCell.nutrientes){
-            cPCells[i] = newPCells[i];
-        }else{
-        //si no, lo guardamos en el historico
-            hPCells[i] = PCells[i];
-            PCells.gc[i] = PCells.gc[i]+1;
-        }
-        if (PCells.gc[i] > max_gc){
-            randomWalk(cPCells[i], cPCells.gc[i]);
-        }
-    } 
+    }
     return hPCell;//devolver tambien cPCells
 }
 
