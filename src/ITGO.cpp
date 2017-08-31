@@ -23,8 +23,9 @@ vector<int> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
 
     //generamos una poblacion de forma aleatoria dado un tam determinado
     pobacionIni = generarPoblacion(tam);//el fitness buscamos el minimo posible
-
-    while(fes<max_fes /*& iter_act > iteraciones*/){
+    actualCell=poblacionIni[0][0];//la primera vez establecemos la mejor celula como la 1 de mejor fitness
+    bestCell=actualCell;
+    while(fes<max_fes){
         //ordenamos la poblacion en funcion del valor de fitness(ascending)
         ordenarPoblacion(poblacionIni);//ordenamos por el fitness
         separarPoblacion(poblacionIni, PCells, QCells, DCells);//20/60/20

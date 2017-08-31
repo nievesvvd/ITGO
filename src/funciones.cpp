@@ -7,16 +7,20 @@
 nicial con los nutrientes de cada celula de forma aleatoria entre 0 y 100 
 * siendo 0 el valor de nutrientes mas bajo y 100 el mas alto (es un valor porcentual)
 **/
-vector <Celulas> generarPoblacion(int tam){
-    vector <Celulas> poblacion;
-    Celulas newCell;
+vector <vector<int> > generarPoblacion(int tam, int poblacion){
+    vector <vector<int> > poblacion;
+    int tamMax = (2*tam)+3;//tam +id + nutrinetes + mejor tam + nutrientes
     int nutrients;
-    for(int i=0; i<tam; i++){
-        newCell.id=-1;
-        newCell.tipo = 'N';
-        newCell.nutrientes = Randint(0,101);
-        newCell.gc=0.0;
-        poblacion.push(newCell);
+    for(int i=0; i<poblacion; i++){
+        for(int j=0; j<tamMax; j++){
+            if(i=0){//seteamos el id 
+                poblacion[i][j]=i;
+            }else if(i>0 && i<=tam+1){//rellenamos el vector de la celula, el resto es para la mejor posicion encontrada
+
+            }else if(i>tam+3 && i<maxTam-1){//en tam +2 guardamos el fitness y en maxTam el mejor fitness
+                poblacion[i][j]=poblacion[i-tam-1][j];
+            }
+        }
     }
     return poblacion;
 }
