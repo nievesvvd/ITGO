@@ -3,35 +3,33 @@
 #include "funciones.h"
 
 
-/**generamos una poblacion i
-nicial con los nutrientes de cada celula de forma aleatoria entre 0 y 100 
+/**generamos una poblacion 
+inicial con los nutrientes de cada celula de forma aleatoria entre 0 y 100 
 * siendo 0 el valor de nutrientes mas bajo y 100 el mas alto (es un valor porcentual)
 **/
-vector <vector<int> > generarPoblacion(int tam, int poblacion){
-    vector <vector<int> > poblacion;
-    int tamMax = (2*tam)+3;//tam +id + nutrinetes + mejor tam + nutrientes
-    int nutrients;
-    for(int i=0; i<poblacion; i++){
-        for(int j=0; j<tamMax; j++){
-            if(i=0){//seteamos el id 
-                poblacion[i][j]=i;
-            }else if(i>0 && i<=tam+1){//rellenamos el vector de la celula, el resto es para la mejor posicion encontrada
-
-            }else if(i>tam+3 && i<maxTam-1){//en tam +2 guardamos el fitness y en maxTam el mejor fitness
-                poblacion[i][j]=poblacion[i-tam-1][j];
-            }
-        }
+vector <vector<int> > generarPoblacion(int tam, int poblacion, vector<vector<double> > &poblacionIni, vector<vector<double> > &mejorCell){
+    vector <vector<int> > resumen;
+    double fit=0.0;
+    for(int i=0; i<poblacion; i++){//tamanio poblacion
+        for(int j=0; j<tam; j++){//tamanio de cell
+            poblacionIni[i][j]=Rand();
+            mejorCell[i][j]= poblacionIni[i][j];
+        }//falta calcular el valor de fitness de cada vector de la primera parte
+        resumen[i][0]=i;                        //almacenamos el id de la cell (posicion)
+        resumen[i][1]=fitness(poblacion[i]);    //almacenamos el fitness de la cell
+        resumen[i][2]=resumen[i][1];            //almacenamos el mejor fitness (actual en este caso)
+        resumen[i][5]=0;                        //ponemos el valor inicial de GC a 0
     }
-    return poblacion;
+    return resumen;
 }
 
 /**ordenamos la pobacion en funcion de su valor de fitness o nutrientes y le asignamos una id a cada celula
 *el orden de ordenacion es ascendente  (D/Q/P)
 **/
-void ordenarPoblacion(vector<Celulas> &poblacionIni){
-    poblacionIni.sort(poblacionIni.begin(), poblacionIni.end());
-    for(int i=0; i<poblacionIni.size(); i++){
-        poblacionIni.id=i;
+void ordenarPoblacion(vector<vector<double> > &poblacionIni, vector<double> fitness, int tam, int pobl){
+    fitness.sort(fitness.begin(), fitness.end());
+    for(int i=0; i<pobl; i++){//intercambiamos las posiciones de la matriz en funcion del fitness
+        //poblacionIni swap pos actual con la pos [i] fitness
     }
 }
 /**Separamos la poblacion en tres subvectores diferentes PCells, QCells, DCells y le establecemos el tipo a cada celula para su posterior identificacion

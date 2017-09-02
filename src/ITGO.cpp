@@ -5,7 +5,8 @@
 using namespace std;
 
 
-vector<int> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
+vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
+    vector<vector<double> resumen;
     int PCells=tamPob*0.2;         //vector con los id de las PCells
     int QCells=tamPob*0.6;         //vector con los id de las QCells
     int DCells=tamPob*0.2;         //vector con los id de las DCells
@@ -27,7 +28,7 @@ vector<int> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
     bestCell=actualCell;
     while(fes<max_fes){
         //ordenamos la poblacion en funcion del valor de fitness(ascending)
-        ordenarPoblacion(poblacionIni);//ordenamos por el fitness
+        resumen = ordenarPoblacion(poblacionIni);//ordenamos por el fitness
         separarPoblacion(poblacionIni, PCells, QCells, DCells);//20/60/20
         //pasos de algoritmo
         crecimientoPCell(poblacionIni, hCells, PCells, gc, fes, beta, max_Gc);//20%
