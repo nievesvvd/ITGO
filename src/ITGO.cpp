@@ -6,30 +6,33 @@ using namespace std;
 
 
 vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
-    vector<vector<double> resumen;
-    int PCells=tamPob*0.2;         //vector con los id de las PCells
-    int QCells=tamPob*0.6;         //vector con los id de las QCells
-    int DCells=tamPob*0.2;         //vector con los id de las DCells
-    vector<vector<int> > poblacionIni;   //vector con la poblacion inicial donde la 1 pos id cell y la 2 pos nutrientes
-    vector<vector<int> > hCells; //mejor pos //matriz que guarda el historico de cada celula donde la primera columna tiene a la poblacion y las filas las mejores pos de cada celula
-    vector<vector<int> > cCells; //pos actul //matriz que guarda el historico de cada celula donde la primera columna tiene a la poblacion y las filas las mejores pos de cada celula
-    int bestCell, actualCell;//guarda el id de la mejor celula
+    vector<vector<double> resumen;          //matriz donde almacenamos el id, el fitness, el mejor fitness y el gc para cada celula
+    Celula nutrientes;
+    int PCells=tamPob*0.2;                  //vector con los id de las PCells
+    int QCells=tamPob*0.6;                  //vector con los id de las QCells
+    int DCells=tamPob*0.2;                  //vector con los id de las DCells
+    vector<vector<double> > poblacionIni;   //vector con la poblacion inicial donde la 1 pos id cell y la 2 pos nutrientes
+    vector<vector<double> > hCells;         //mejor pos //matriz que guarda el historico de cada celula donde la primera columna tiene a la poblacion y las filas las mejores pos de cada celula
+    vector<vector<double> > cCells;         //pos actul //matriz que guarda la pos actual de cada celula donde la primera columna tiene a la poblacion y las filas las mejores pos de cada celula
+    int bestCell, actualCell;               //guarda el id de la mejor celula
     int fes=0;
     int max_Gc=0.7*dim;
 
     PCells.resize(tamPob*0.2);
     QCells.resize(tamPob*0.6);
     DCells.resize(tamPob*0.2);
+    nutrientes.first.resize(tamPob);
 
 
     //generamos una poblacion de forma aleatoria dado un tam determinado
-    pobacionIni = generarPoblacion(tam);//el fitness buscamos el minimo posible
-    actualCell=poblacionIni[0][0];//la primera vez establecemos la mejor celula como la 1 de mejor fitness
-    bestCell=actualCell;
+    pobacionIni = generarPoblacion(tam, tamPob, poblacionIni, hCells, nutrientes);//el fitness buscamos el minimo posible
     while(fes<max_fes){
+        nutrientes.sort();  //ordenamos las celulas segun su nivel de nutrientes de menos a mayor
         //ordenamos la poblacion en funcion del valor de fitness(ascending)
-        resumen = ordenarPoblacion(poblacionIni);//ordenamos por el fitness
+        resumen = ordenarPoblacion(poblacionIni, nutrientes);//ordenamos por el fitness
         separarPoblacion(poblacionIni, PCells, QCells, DCells);//20/60/20
+        actualCell=poblacionIni[0][0];//la primera vez establecemos la mejor celula como la 1 de mejor fitness
+        bestCell=actualCell;
         //pasos de algoritmo
         crecimientoPCell(poblacionIni, hCells, PCells, gc, fes, beta, max_Gc);//20%
         crecimientoQCell(hPcells, cPCells, QCells, prolCells, gc, fes, beta, max_Gc);//60%

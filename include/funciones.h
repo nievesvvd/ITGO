@@ -1,17 +1,30 @@
 #ifndef FUNCIONES_H
 #define FUNCIONES_H
 
-#include <vector.h>
+#include <vector>
 #include <algorithm>    // std::random_shuffle
+#include <utility>      //Para el pair
 #include "random_ppio.h"
 
 using namespace std;
+
+//**************************** Ayuda para el pair ****************************//
+typedef std::pair <std::vector <int>, double> Celula;   //pos 1 del pais es el id, y la ps2 el valor de los nutrientes
+
+class compararCelulas{ //Comparador de la PQ. Devuelve TRUE si coste de cell1 es mayor que coste de cell2
+public:
+    compararCelulas(){}
+  bool operator()(const Celula cell1, const Celula cell2){
+    return individuo1.second < individuo2.second;
+  }
+};
+//**************************** Ayuda para el pair ****************************//
 
 /**Funcion con la que generamos una poblacion inicial aleatoria donde
 // tam es el tamaño de la poblacion (longitud del vector)
 // poblacion es el numero de individuos que vamos a crear
 **/
-vector <vector<int> > generarPoblacion(int tam, int poblacion, vector<vector<double> > &poblacionIni, vector<vector<double> > &mejorCell);
+vector <vector<int> > generarPoblacion(int tam, int poblacion, vector<vector<double> > &poblacionIni, vector<vector<double> > &mejorCell, Celula &nutrientes);
 //ordenamos la poblacion de forma ascendente con respecto a la cantidad de nutrientes D/Q/P
 void ordenarPoblacion(vector<vector<double> > &poblacionIni, vector<double> fitness, int tam, int pobl);
 void separarPoblacion(vector<vector<double> > poblacionIni, vector<int> &PCells, vector<int> &QCells, vector<int> &DCells);

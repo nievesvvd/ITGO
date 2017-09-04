@@ -7,7 +7,7 @@
 inicial con los nutrientes de cada celula de forma aleatoria entre 0 y 100 
 * siendo 0 el valor de nutrientes mas bajo y 100 el mas alto (es un valor porcentual)
 **/
-vector <vector<int> > generarPoblacion(int tam, int poblacion, vector<vector<double> > &poblacionIni, vector<vector<double> > &mejorCell){
+vector <vector<int> > generarPoblacion(int tam, int poblacion, vector<vector<double> > &poblacionIni, vector<vector<double> > &mejorCell, Celula &nutrientes){
     vector <vector<int> > resumen;
     double fit=0.0;
     for(int i=0; i<poblacion; i++){//tamanio poblacion
@@ -19,6 +19,8 @@ vector <vector<int> > generarPoblacion(int tam, int poblacion, vector<vector<dou
         resumen[i][1]=fitness(poblacion[i]);    //almacenamos el fitness de la cell
         resumen[i][2]=resumen[i][1];            //almacenamos el mejor fitness (actual en este caso)
         resumen[i][5]=0;                        //ponemos el valor inicial de GC a 0
+        nutrientes.first[i]=i;                  //ponemos como id de la cell el de la iteracion
+        nutrientes.second[i]=resumen[i][1];     //guardamos tambien el valor de fitness por el que vamos a ordenar el pair
     }
     return resumen;
 }
@@ -26,31 +28,33 @@ vector <vector<int> > generarPoblacion(int tam, int poblacion, vector<vector<dou
 /**ordenamos la pobacion en funcion de su valor de fitness o nutrientes y le asignamos una id a cada celula
 *el orden de ordenacion es ascendente  (D/Q/P)
 **/
-void ordenarPoblacion(vector<vector<double> > &poblacionIni, vector<double> fitness, int tam, int pobl){
-    fitness.sort(fitness.begin(), fitness.end());
-    for(int i=0; i<pobl; i++){//intercambiamos las posiciones de la matriz en funcion del fitness
-        //poblacionIni swap pos actual con la pos [i] fitness
-    }
+void ordenarPoblacion(vector<vector<double> > poblacionIni, Celula nutrentes){
+    // for(int i=nutrientes.first.size(); i++){
+        
+    // }
 }
 /**Separamos la poblacion en tres subvectores diferentes PCells, QCells, DCells y le establecemos el tipo a cada celula para su posterior identificacion
 **/
 void separarPoblacion(vector<Celulas> poblacionIni, vector<Celulas> &PCells, vector<Celulas> &QCells, vector<Celulas> &DCells){
-    int pos1, pos2, pos3;
-    pos1=poblacionIni.size()*0.2;
-    pos2=poblacionIni.size()*0.6;
-    pos3=pos1;
-    for(int i=0; i<poblacionIni.size(); i++){
-        if(i<pos1){
-            poblacionIni.tipo='D';
-            DCells.push_back(poblacionIni[i]);
-        }else if(i>=pos1 && i<pos2){
-            poblacionIni.tipo='Q';
-            QCells.push_back(poblacionIni[i]);
-        }else{
-            poblacionIni.tipo='P';
-            PCells.push_back(poblacionIni[i]);
-        }
-    }
+    int dCells=nutrientes.first.size()*0.2;
+    int qCells=(nutrientes.first.size()*0.6)+dCells;
+
+    // int pos1, pos2, pos3;
+    // pos1=poblacionIni.size()*0.2;
+    // pos2=poblacionIni.size()*0.6;
+    // pos3=pos1;
+    // for(int i=0; i<poblacionIni.size(); i++){
+    //     if(i<pos1){
+    //         poblacionIni.tipo='D';
+    //         DCells.push_back(poblacionIni[i]);
+    //     }else if(i>=pos1 && i<pos2){
+    //         poblacionIni.tipo='Q';
+    //         QCells.push_back(poblacionIni[i]);
+    //     }else{
+    //         poblacionIni.tipo='P';
+    //         PCells.push_back(poblacionIni[i]);
+    //     }
+    // }
 }
 
 /**COlocamos las celulas de la poblacion inicial en torno a la posicion central dependiendo de la dimension D de forma que la pos 0 es la esquina 
