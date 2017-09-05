@@ -2,6 +2,7 @@
 #define _DATOS_H_
 
 #include <vector>
+#include "random-ppio.h"
 
 class Datos{
 private:
@@ -10,37 +11,59 @@ private:
     vector<vector<double> > cCells; //matriz que contiene los datos actuales de la matriz de celulas   
     vector<vector<double> > hCells; //matriz que contiene los datos con las mejores celulas encontradas para cada una de las anteriores
 public:
-    Datos(int tamPobl, int dim){
+    Datos(){
         vector<double> init;
-        for(int i=0; i<tamPobl; i++){
-            init.resize(dim, 0.0);
-            cCells.push_back(init);
-            hCells.push_back(init);
+        init.resize(0, 0.0);  //es de dim ya que en la ultima posicion pondremos fitness en hCell y GC en cCell
+        cCells.push_back(init);
+        hCells.push_back(init);
+        poblacion=0;
+        dimension=0;
+        
+    }
+    Datos(int tam, int dim){
+        vector<double> aux;
+        double valor;
+        for(int i=0; i<tam; i++){
+            for(int j=0; j<dim; j++){
+                valor=ran
+            }
         }
     }
     ~Datos();
 
-    void setTamPoblacion(int tamPobl){
+    /*void setTamPoblacion(int tamPobl){
         poblacion = tamPobl;
     }
     void setDimension(int dim){
         dimension = dim;
+    }*/
+    void setGC(int gc, int cell){
+        cCells[cell][dimension]= gc;
+    }
+    void setFitness(double fitness, int cell){
+        hcells[cell][dimension]=fitness;
     }
 
 
-
-    double getcCell(int posx, int posy){
-        return cCells[posx][posy];
+    vector<double> getcCell(int posx){
+        return cCells[posx];
     }
-    double gethCell(int celula){
-        return hCells[posx][posy];       
+    vector<double> gethCell(int posx){
+        return hCells[posx];       
     }
     double getcFitness(int cell){
-        return cCells[cell][tamPobl];
+        return cCells[cell][dimension];
     }
-    double gethFitness(){
-
+    double getGc(int cell){
+        return hCell[cell][dimension];
     }
+    int getPoblacion(){
+        return poblacion;
+    }
+    int getDimension(){
+        return dimension;
+    }
+    void generarPoblacion();
 
 };
 

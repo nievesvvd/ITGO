@@ -2,11 +2,11 @@
 #include <iostream>
 #include "ITGO.h"
 
-using namespace std;
+using namespace std; 
 
 
 vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
-    vector<vector<double> resumen;          //matriz donde almacenamos el id, el fitness, el mejor fitness y el gc para cada celula
+    Datos datos;
     Celula nutrientes;
     int PCells=tamPob*0.2;                  //vector con los id de las PCells
     int QCells=tamPob*0.6;                  //vector con los id de las QCells

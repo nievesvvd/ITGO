@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "funciones.h"
+#include "datos.h"
 
 using namespace std;
 
