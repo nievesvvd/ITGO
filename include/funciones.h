@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>    // std::random_shuffle
 #include <utility>      //Para el pair
+#include <math>         //para el levy fight
 #include "random_ppio.h"
 
 using namespace std;

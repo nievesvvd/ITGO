@@ -52,6 +52,7 @@ vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
 /*A continuacion se pondran los metodos de los 4 tipos de celulas*/
 
 void movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness, max_Gc){
+    float stp=0.0, move=0.0;
     pCell=nutrientes.first.size()*0.2;
     qCell=nutrientes.first.size()*0.6+pCell;
     vector<float> vuelo;
@@ -60,19 +61,22 @@ void movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness, max_Gc){
     for(int i=0; i<nutrientes.first.size(); i++){
         for(int j=0; j<poblacionIni[0].size(); j++){
             if(i < pCell){//pcells
-                //levy fligh
-                fit=fitness();
+                stp=step();
+                move=levy(stp);
+                cCells[i][j]= cCells[i][j]+alpha()*move;
+                fit=fitness(cCells[i]);
                 if(fit<nutrientes.second[i]){
                     bestFitness[i] = fit;
-                    vuelo.swap(hCells[nutrientes.first[i]]);//en hCell guardo el nuevo valor si es mejor
+                    hCells[i][j]= cCells[i][j];//en hCell guardo el nuevo valor si es mejor
                 }else{
-                    vuelo.swap(cCells[nutrientes.first[i]]);//en cCell guardo el nuevo valor
-                    gc[i]++;
+                    gc[nutrientes.first[i]]++;
                 }
-                if(gc[i]>max_Gc){
-                    randomWalk(cCells[nutrientes.first[i]], gc[i]);
+                if(gc[nutrientes.first[i]]>max_Gc){
+                    randomWalk(cCells[nutrientes.first[i]], gc[nutrientes.first[i]]);
                 }
+
             }else if(i>=pCell && i<=qCell){//qcells
+                
 
             }else{//dcells
 

@@ -42,91 +42,29 @@ void separarPoblacion(Celula nutrientes, vector<Celulas> &PCells, vector<Celulas
     }
 }
 
-/**COlocamos las celulas de la poblacion inicial en torno a la posicion central dependiendo de la dimension D de forma que la pos 0 es la esquina 
-* superior izquierda 
-**/
-vector<Celulas> establecerPoblacion(vector<Celulas> PCells, vector<Celulas> QCells, vector<Celulas> DCells, int D){
-    int centro = D/2, capas=0, poblacion=0, p=0, q=0, d=0, cap=1;
-    vector<Historico> cCells;
-    poblacion=DCells.size()+QCells.size()+PCells.size();
-    cCells.resize(poblacion);
-    vector<Historico>Ppos,Qpos,Dpos;
-    bool terminado=false;
-
-    //ordenamos la celulas de forma aleatoria para que de esta forma sea mas facil repartirlas por la celcula
-    random_shuffle(PCells.begin(), PCells.end());
-    random_shuffle(QCells.begin(), QCells.end());
-    random_shuffle(DCells.begin(), DCells.end());
-    //establecemos cuantas capas vamos a necesitar para cada caso
-    Dpos.resize(8);
-    Qpos.resize(16);
-    Ppos.resize(24);
-    for(int i=centro-cap; i<3; i++){
-        for(int j=centro-cap; j<3; j++){
-            if(cap=1){//si estamos en la capa de dcell
-                if(!centro(i,j,centro)){
-                    Dpos.posX[d]=i;
-                    Dpos.posY[d]=j;
-                    Dpos.id[d]=-1;
-                    d++;
-                }
-            }else if(cap=2){
-                if(!centro(i,j,centro) && j>(centro-cap) && {
-                    Qpos.posX[q]=i;
-                    Qpos.posY[q]=j;
-                    Qpos.id[q]=-2;
-                    q++; 
-                }
-            }else if (cap=3){
-                if(!centro(i,j,centro) && Ppos.id[p]!=-1 && Qpos.id[p]!=-2){
-                    Qpos.posX[q]=i;
-                    Qpos.posY[q]=j;
-                    Qpos.id[q]=-1;
-                    q++; 
-                }
-            }
-        }
-    }
-    // if (poblacion==10){
-    //     capas=3;//1-1-1
-    //     for(int i=0; i<24; i++){
-    //     }
-    // }else if (poblacion==30){
-    //     capas=4;//1-2-1
-    // }else if (poblacion==50){
-    //     capas=5;//2-2-1
-    // }
+float alpha(int fes, int max_fes){
+    float valor=0.0, rnd=0.0;
+    rnd=Rand();
+    valor=rnd*(fes/max_fes);
+    return valor;
 }
 
-void actualizarPoblacion(vector<Celulas> &poblacionIni, vector<Celulas> PCells, vector<Celulas> QCells, vector<Celulas> DCells){
-    pobl=poblacionIni.size();
-    for(int i=0; i<pobl; i++){
-        poblacionIni.pop();
-    }
-    for(int i=0; i<PCells.size(); i++){
-        poblacionIni.push_back(PCells[i]);
-    }
-    for(int i=0; i<QCells.size(); i++){
-        poblacionIni.push_back(QCells[i]);
-    }
-    for(int i=0; i<DCells.size(); i++){
-        poblacionIni.push_back(DCells[i]);
-    }
+float levy(float s){
+    float valor=0.0, w=0.0;
+    w=rand(0,2);
+    valor=pow(s, -1-w);
+    return valor;
+
 }
 
-//vector <Celulas> distanciaEuclidea(vector <Celulas> QCells, Celulas cell){}
-
-double mediaFitness(vector <Celulas> DCells){
-    double media=0.0;
-    for (int i=0; i<DCells.size(); i++){
-        media+=DCells[i].nutrientes;
-    }
-    return media/DCells.size();
+float step(){
+    float valor=0.0, u=0.0, v=0.0, w=0.0;
+    w=Rand();
+    v=pow(sigma(),2);
+    valor=u/pow(v,1/w);
+    return valor;
 }
 
-double alpha(double fes, double max_fes){
-    return (fes/max_fes);
-}
-double levy(double lamda){
-
+float sigma(){
+    return 0.0;
 }
