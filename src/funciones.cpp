@@ -68,3 +68,6 @@ float step(){
 float sigma(){
     return 0.0;
 }
+float beta(){
+    return 0.0;
+}

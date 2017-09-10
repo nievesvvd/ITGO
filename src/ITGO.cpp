@@ -52,22 +52,29 @@ vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
 /*A continuacion se pondran los metodos de los 4 tipos de celulas*/
 
 void movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness, max_Gc){
-    float stp=0.0, move=0.0;
+    float stp=0.0, move=0.0, beta=0.0;
+    int randQCell, proxima1, proxima2;  
     pCell=nutrientes.first.size()*0.2;
     qCell=nutrientes.first.size()*0.6+pCell;
     vector<float> vuelo;
     vuelo.resize(nutrientes.first.size());
 
     for(int i=0; i<nutrientes.first.size(); i++){
+        if(i>=pCell && i<=qCell){//qcells
+            ranQCell=Randint(0, (nutrientes.first.size()*0.6)-1);
+            distanciaEuclidea(QCells, poblacionIni, proxima1, proxima2);
+            stp=step();
+            beta=beta();
+        }
         for(int j=0; j<poblacionIni[0].size(); j++){
             if(i < pCell){//pcells
                 stp=step();
                 move=levy(stp);
-                cCells[i][j]= cCells[i][j]+alpha()*move;
+                cCells[nutrientes.first[i]][j]= cCells[nutrientes.first[i]][j]+alpha()*move;
                 fit=fitness(cCells[i]);
                 if(fit<nutrientes.second[i]){
-                    bestFitness[i] = fit;
-                    hCells[i][j]= cCells[i][j];//en hCell guardo el nuevo valor si es mejor
+                    bestFitness[nutrientes.first[i]] = fit;
+                    hCells[nutrientes.first[i]][j]= cCells[nutrientes.first[i]][j];//en hCell guardo el nuevo valor si es mejor
                 }else{
                     gc[nutrientes.first[i]]++;
                 }
@@ -76,8 +83,16 @@ void movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness, max_Gc){
                 }
 
             }else if(i>=pCell && i<=qCell){//qcells
-                
-
+                if(rand()<= 0.5){
+                    cCell[nutrientes.first[i]][j] = cCell[nutrientes.first[i]][j]+(beta*stp*
+                        (hCells[nutrientes.first[ranQCell]][j]-cCell[nutrientes.first[i]][j]) )+
+                        (beta*stp*(cCell[nutrientes.first[proxima1]][j])-cCell[nutrientes.first[proxima2]][j]) ) );
+                }else{
+                    cCell[nutrientes.first[i]][j] = cCell[nutrientes.first[i]][j]+ (beta*stp*
+                        ( cCell[nutrientes.first[ranQCell]][j] - cCell[nutrientes.first[i]][j]) )+
+                        (beta*stp*(cCell[nutrientes.first[proxima1]][j]- cCell[nutrientes.first[proxima2]][j]) );
+                }
+                //actuaizar Qcell
             }else{//dcells
 
             }
