@@ -52,7 +52,7 @@ vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
 /*A continuacion se pondran los metodos de los 4 tipos de celulas*/
 
 void movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness, max_Gc){
-    float stp=0.0, move=0.0, beta=0.0;
+    float stp=0.0, move=0.0, beta=0.0, mute=0.0;
     int randQCell, proxima1, proxima2;  
     pCell=nutrientes.first.size()*0.2;
     qCell=nutrientes.first.size()*0.6+pCell;
@@ -60,8 +60,8 @@ void movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness, max_Gc){
     vuelo.resize(nutrientes.first.size());
 
     for(int i=0; i<nutrientes.first.size(); i++){
-        if(i>=pCell && i<=qCell){//qcells
-            ranQCell=Randint(0, (nutrientes.first.size()*0.6)-1);
+        if(i>=pCell && i<=qCell){//inicializacion qcells
+            ranPCell=Randint(0, (nutrientes.first.size()*0.2)-1);
             distanciaEuclidea(QCells, poblacionIni, proxima1, proxima2);
             stp=step();
             beta=beta();
@@ -83,14 +83,19 @@ void movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness, max_Gc){
                 }
 
             }else if(i>=pCell && i<=qCell){//qcells
-                if(rand()<= 0.5){
-                    cCell[nutrientes.first[i]][j] = cCell[nutrientes.first[i]][j]+(beta*stp*
-                        (hCells[nutrientes.first[ranQCell]][j]-cCell[nutrientes.first[i]][j]) )+
-                        (beta*stp*(cCell[nutrientes.first[proxima1]][j])-cCell[nutrientes.first[proxima2]][j]) ) );
-                }else{
-                    cCell[nutrientes.first[i]][j] = cCell[nutrientes.first[i]][j]+ (beta*stp*
-                        ( cCell[nutrientes.first[ranQCell]][j] - cCell[nutrientes.first[i]][j]) )+
-                        (beta*stp*(cCell[nutrientes.first[proxima1]][j]- cCell[nutrientes.first[proxima2]][j]) );
+                //vemos si se da una mutacion
+                mute=Randfloat(0, 1.8);
+                if(mute > exp(fes/Max_fes-1)){
+                //se produce la mutacion
+                    if(rand()<= 0.5){
+                        cCell[nutrientes.first[i]][j] = cCell[nutrientes.first[i]][j]+(beta*stp*
+                            (hCells[nutrientes.first[ranPCell]][j]-cCell[nutrientes.first[i]][j]) )+
+                            (beta*stp*(cCell[nutrientes.first[proxima1]][j])-cCell[nutrientes.first[proxima2]][j]) ) );
+                    }else{
+                        cCell[nutrientes.first[i]][j] = cCell[nutrientes.first[i]][j]+ (beta*stp*
+                            ( cCell[nutrientes.first[ranPCell]][j] - cCell[nutrientes.first[i]][j]) )+
+                            (beta*stp*(cCell[nutrientes.first[proxima1]][j]- cCell[nutrientes.first[proxima2]][j]) );
+                    }
                 }
                 //actuaizar Qcell
             }else{//dcells
