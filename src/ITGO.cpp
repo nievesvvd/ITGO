@@ -6,7 +6,7 @@ using namespace std;
 
 
 vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
-    Celula nutrientes;
+    vector<Celula> nutrientes;
 
     vector<vector<float> > cCells;
     vector<vector<float> > hCells;
@@ -53,7 +53,7 @@ vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
 }
 
 /*A continuacion se pondran los metodos de los 4 tipos de celulas*/
-void movePCells(){
+void movePCells(vector<vector<float> > &cCells, vector<vector<float> > &hCells, vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
     float stp=0.0, move=0.0, fit=0.0;
     pCell=nutrientes.first.size()*0.2;
     vector<float> vuelo;
@@ -64,8 +64,9 @@ void movePCells(){
             stp=step();
             move=levy(stp);
             cCells[nutrientes.first[i]][j]= cCells[nutrientes.first[i]][j]+alpha()*move;
-            fit=fitness(cCells[i]);
         }
+        fit=fitness(cCells[i]);
+        //incrementamos el contador fes
         if(fit<nutrientes.second[i]){
             bestFitness[nutrientes.first[i]] = fit;
             hCells[nutrientes.first[i]][j]= cCells[nutrientes.first[i]][j];//en hCell guardo el nuevo valor si es mejor
@@ -75,9 +76,9 @@ void movePCells(){
         if(gc[nutrientes.first[i]]>max_Gc){
             randomWalk(cCells[nutrientes.first[i]], gc[nutrientes.first[i]]);
         }
-        //return
     }
 }
+
 void moveQCells(){
     float stp=0.0, move=0.0, fit=0.0;
     int randQCell, proxima1, proxima2;  
