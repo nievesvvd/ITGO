@@ -19,6 +19,10 @@ public:
     return individuo1.second < individuo2.second;
   }
 };
+vector<vector<float> >cCells;
+vector<vector<float> >hCells;
+vector<Celula> nutrientes;
+vector<float> bestFitness;
 //**************************** Ayuda para el pair ****************************//
 
 /**Funcion con la que generamos una poblacion inicial aleatoria donde

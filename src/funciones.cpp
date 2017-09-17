@@ -7,7 +7,7 @@
 inicial con los nutrientes de cada celula de forma aleatoria entre 0 y 100 
 * siendo 0 el valor de nutrientes mas bajo y 100 el mas alto (es un valor porcentual)
 **/
-void generarPoblacion(vector<vector<float> > &cCells, vector<vector<float> > &hCells, Celula &nutrientes, int tamPobl, int dim){
+void generarPoblacion(Celula &nutrientes, int tamPobl, int dim){
     double fit=0.0;
     float valor=0.0;
     vector<float> filas;
@@ -39,6 +39,23 @@ void separarPoblacion(Celula nutrientes, vector<Celulas> &PCells, vector<Celulas
         }else{
             DCells.push_back(nutrientes.first[i]);
         }
+    }
+}
+
+void actualizarCelula(vector<float>newCell, int id, float nutr, vector<int> gc){
+    float fit;
+    fit=fitness(cCells[id]);
+    fes++;
+    if(fit<nutr){
+        bestFitness[id] = fit;
+        hCells[id]= newCell;//en hCell guardo el nuevo valor si es mejor
+    }else{
+        cCells[id] = newCell;
+        nutrientes.second[id]=fit;
+        gc[id]++;
+    }
+    if(gc[nutrientes.first[i]]>max_Gc){
+        randomWalk(cCells[id], gc[id]);
     }
 }
 
