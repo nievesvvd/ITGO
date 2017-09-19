@@ -50,7 +50,7 @@ vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
 void movePCells(int PCells, vector<vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
     float stp=0.0, move=0.0, fit=0.0;
     pCell=nutrientes.first.size()*0.2;
-    vector<float> newCells;
+    vuelo
     vuelo.resize(nutrientes.first.size());
     newCells.resize(poblacionIni[0].size());
 
@@ -67,33 +67,45 @@ void movePCells(int PCells, vector<vector<int> &gc, int max_Gc, vector<Celula> n
 }
 
 void moveQCells(int PCells, int QCells, vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
-    float stp=0.0, move=0.0, fit=0.0;
+    float stp=0.0, move=0.0, fit=0.0, beta=0.0;
     int randQCell, proxima1, proxima2;
-    vector<float> vuelo;
-    vuelo.resize(nutrientes.first.size());
+    vector<float> newCells;
+    newCells.resize(nutrientes.first.size());
     qCell=nutrientes.first.size()*0.6+pCell;
     
     for(int i=0; i<QCells; i++){
         ranPCell=Randint(0, (nutrientes.first.size()*0.2)-1);
         distanciaEuclidea(QCells, poblacionIni, proxima1, proxima2);
         //faltan los pasos
+        beta=beta();
+        move=step(beta);
         for(int j=0; j<poblacionIni[0].size(); j++){
             mute=Randfloat(0, 1.8);
             if(mute > exp(fes/Max_fes-1)){
             //se produce la mutacion
                 if(rand()<= 0.5){
-                    cCells[nutrientes.first[i+PCells]][j] = cCells[nutrientes.first[i+PCells]][j]+(beta*stp*
+                    newCells[j] = cCells[nutrientes.first[i+PCells]][j]+(beta*stp*
                         (hCells[nutrientes.first[ranPCell]][j]-cCells[nutrientes.first[i]][j]) )+
                         (beta*stp*(cCells[nutrientes.first[proxima1]][j])-cCells[nutrientes.first[proxima2]][j]) ) );
                 }else{
-                    cCells[nutrientes.first[i+PCells]][j] = cCells[nutrientes.first[i+PCells]][j]+ (beta*stp*
+                    newCells[j] = cCells[nutrientes.first[i+PCells]][j]+ (beta*stp*
                         ( cCells[nutrientes.first[ranPCell]][j] - cCells[nutrientes.first[i+PCells]][j]) )+
                         (beta*stp*(cCells[nutrientes.first[proxima1]][j]- cCells[nutrientes.first[proxima2]][j]) );
                 }
             }
         }
         actualizarCelula(newCell, i+PCells, nutrientes.second[i+PCells]);
+        newCells.clear();
+        newCells.resize(poblacionIni[0].size());
     }
+}
+
+void moveDCells(int PQCells, int DCells, vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
+    
+
+    actualizarCelula(newCell, i+PQCells, nutrientes.second[i+PQCells]);
+    newCells.clear();
+    newCells.resize(poblacionIni[0].size());
 }
 
 /** InvasiveCells es el conjunto de las celulas invasivas
