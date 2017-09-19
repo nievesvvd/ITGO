@@ -60,7 +60,7 @@ void movePCells(int PCells, vector<vector<int> &gc, int max_Gc, vector<Celula> n
             move=levy(stp);
             newCells[j]= cCells[nutrientes.first[i]][j]+alpha()*move;
         }
-        actualizarCelula(newCell, i, nutrientes.second[i], gc);
+        actualizarCelula(newCells, i, nutrientes.second[i], gc[i]);
         newCells.clear();
         newCells.resize(poblacionIni[0].size());
     }
@@ -68,13 +68,13 @@ void movePCells(int PCells, vector<vector<int> &gc, int max_Gc, vector<Celula> n
 
 void moveQCells(int PCells, int QCells, vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
     float stp=0.0, move=0.0, fit=0.0, beta=0.0;
-    int randQCell, proxima1, proxima2;
+    int randPCell, proxima1, proxima2;
     vector<float> newCells;
     newCells.resize(nutrientes.first.size());
     qCell=nutrientes.first.size()*0.6+pCell;
     
     for(int i=0; i<QCells; i++){
-        ranPCell=Randint(0, (nutrientes.first.size()*0.2)-1);
+        randPCell=Randint(0, (nutrientes.first.size()*0.2)-1);
         distanciaEuclidea(QCells, poblacionIni, proxima1, proxima2);
         //faltan los pasos
         beta=beta();
@@ -85,27 +85,40 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int max_Gc, vector<Celu
             //se produce la mutacion
                 if(rand()<= 0.5){
                     newCells[j] = cCells[nutrientes.first[i+PCells]][j]+(beta*stp*
-                        (hCells[nutrientes.first[ranPCell]][j]-cCells[nutrientes.first[i]][j]) )+
+                        (hCells[nutrientes.first[randPCell]][j]-cCells[nutrientes.first[i]][j]) )+
                         (beta*stp*(cCells[nutrientes.first[proxima1]][j])-cCells[nutrientes.first[proxima2]][j]) ) );
                 }else{
                     newCells[j] = cCells[nutrientes.first[i+PCells]][j]+ (beta*stp*
-                        ( cCells[nutrientes.first[ranPCell]][j] - cCells[nutrientes.first[i+PCells]][j]) )+
+                        ( cCells[nutrientes.first[randPCell]][j] - cCells[nutrientes.first[i+PCells]][j]) )+
                         (beta*stp*(cCells[nutrientes.first[proxima1]][j]- cCells[nutrientes.first[proxima2]][j]) );
                 }
             }
         }
-        actualizarCelula(newCell, i+PCells, nutrientes.second[i+PCells]);
+        actualizarCelula(newCells, i+PCells, nutrientes.second[i+PCells], gc[i+PCells]);
         newCells.clear();
         newCells.resize(poblacionIni[0].size());
     }
 }
 
-void moveDCells(int PQCells, int DCells, vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
-    
+void moveDCells(int PCells, int QCells, int DCells, vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
+    int randPCell, randQCell;
+    vector<float> newCells;
+    float y;
+    y = Randfloat(-1, 1.1);
+    newCells.resize(nutrientes.first.size());
 
-    actualizarCelula(newCell, i+PQCells, nutrientes.second[i+PQCells]);
-    newCells.clear();
-    newCells.resize(poblacionIni[0].size());
+    for(int i=0; i<DCells; i++){
+        ranPCell=Randint(0, (nutrientes.first.size()*0.2)-1);
+        ranQCell=Randint((nutrientes.first.size()*0.2)-1, (nutrientes.first.size()*0.6)-1);
+        for(int j=0; j<poblacionIni[0].size(); j++){
+            newCells[j]=cCells[nutrientes.first[PCells+QCells+i]][j] + 
+            y * (cCells[nutrientes.first[randPCell]][j] - cCells[nutrientes.first[PCells+QCells+i]][j] ) +
+            y * (cCells[nutrientes.first[randQCell]][j] - cCells[nutrientes.first[PCells+QCells+i]][j] );
+        }
+        actualizarCelula(newCells, i+PQCells+QCells, nutrientes.second[i+PQCells+QCells], gc[i+PCells+QCells]);
+        newCells.clear();
+        newCells.resize(poblacionIni[0].size());
+    }
 }
 
 /** InvasiveCells es el conjunto de las celulas invasivas
@@ -114,22 +127,28 @@ void moveDCells(int PQCells, int DCells, vector<int> &gc, int max_Gc, vector<Cel
 **  beta parametro de levy
 **  Max_Gc es el valor de crecimiento maximo de la celula
 **/
-void cellInvasivas(cPCells, prolCells, DCells, gc, fes, max_Gc){
-    double valorMedio=0.0;
-    int posDCell=0;
-    Celulas iCell, newCell;
-    valorMedio=mediaFitness(DCells);
-    for(int i=0; i<DCell.size(); i++){
-        posDCell= Randint(0, DCells.size()-1);
-        newCell=Randint(0, D);
-        if(DCells[i].nutrientes < valorMedio){
-            for(int j=0; j<D; j++){
-                iCell[i,j]=cPCells[i,j]+rand(newCell[1,j]-cPCells[i,j]);//formula 14
+void cellInvasivas(int tamPob){
+    int randPCell, Dpos, pos=0;
+    float med=0.0, fit=0.0;
+    Dpos = tamPob - tamPob*0.2;
+    vector<float> newCells;
+    newCells.resize(nutrientes.first.size());
+
+    for(int i=0; i<tamPob; i++){
+        ranPCell=Randint(0, (nutrientes.first.size()*0.2)-1);
+        med=mediaNutrientes(Dpos, tamPob*0.2);
+        if(nutrientes.second[Dpos]<med){
+            pos=Randint(0, (tamPob*0.2)-1);
+            for(int j=0; j<nutrientes.first[0]; j++){
+                newCells[j] = cCells[nutrientes.first[randPCell]][j] + 
+                rand()*( cCells[nutrientes.first[pos]][j]-cCells[nutrientes.first[i+Dpos]][j] ); ///!!!!
             }
-            fitness(iCell[i], iCell[i].gc, iCell[i].nutrientes);
+
+            //actualizarCelula(newCells, i+Dpos, nutrientes.second[i+Dpos] );
+            fit=fitness(cCells[i+Dpos]);
             fes++;
-            if(iCell[i].nutrientes > x){
-                DCell[i] = iCell[i]; //formula 15
+            if(fit<nutrientes.second[i+Dpos]){
+                
             }
         }
     }

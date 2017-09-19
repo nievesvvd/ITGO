@@ -23,6 +23,7 @@ vector<vector<float> >cCells;
 vector<vector<float> >hCells;
 vector<Celula> nutrientes;
 vector<float> bestFitness;
+int Max_Gc=10;
 //**************************** Ayuda para el pair ****************************//
 
 /**Funcion con la que generamos una poblacion inicial aleatoria donde

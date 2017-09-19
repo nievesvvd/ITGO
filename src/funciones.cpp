@@ -42,7 +42,7 @@ void separarPoblacion(Celula nutrientes, vector<Celulas> &PCells, vector<Celulas
     }
 }
 
-void actualizarCelula(vector<float>newCell, int id, float nutr, vector<int> gc){
+void actualizarCelula(vector<float>newCell, int id, float nutr, int &gc){
     float fit;
     fit=fitness(cCells[id]);
     fes++;
@@ -52,11 +52,19 @@ void actualizarCelula(vector<float>newCell, int id, float nutr, vector<int> gc){
     }else{
         cCells[id] = newCell;
         nutrientes.second[id]=fit;
-        gc[id]++;
+        gc++;
     }
     if(gc[nutrientes.first[i]]>max_Gc){
-        randomWalk(cCells[id], gc[id]);
+        randomWalk(cCells[id], gc);
     }
+}
+
+float mediaNutrientes(int Dpos, int pobl){
+    float resultado=0.0;
+    for(int i=0; i<pobl; i++){
+        resultado=( resultado+(nutrientes.second[Dpos+i]) )/pobl;
+    }
+    return resultado;
 }
 
 float alpha(int fes, int max_fes){
