@@ -131,24 +131,26 @@ void cellInvasivas(int tamPob){
     int randPCell, Dpos, pos=0;
     float med=0.0, fit=0.0;
     Dpos = tamPob - tamPob*0.2;
-    vector<float> newCells;
+    vector<float> newCells, ICells;
     newCells.resize(nutrientes.first.size());
+    ICells.resize(nutrientes.first.size());
 
     for(int i=0; i<tamPob; i++){
         ranPCell=Randint(0, (nutrientes.first.size()*0.2)-1);
         med=mediaNutrientes(Dpos, tamPob*0.2);
-        if(nutrientes.second[Dpos]<med){
-            pos=Randint(0, (tamPob*0.2)-1);
+        if(nutrientes.second[Dpos+i]<med){
+            newCells=generarSolucion(nutrientes.first.size());//generamos un vector del tam de las cells
             for(int j=0; j<nutrientes.first[0]; j++){
-                newCells[j] = cCells[nutrientes.first[randPCell]][j] + 
-                rand()*( cCells[nutrientes.first[pos]][j]-cCells[nutrientes.first[i+Dpos]][j] ); ///!!!!
+                ICells[i][j] = cCells[nutrientes.first[randPCell]][j] + 
+                rand()*( newCells[i]][j]-cCells[nutrientes.first[randPCell]][j] ); ///!!!!
             }
 
             //actualizarCelula(newCells, i+Dpos, nutrientes.second[i+Dpos] );
-            fit=fitness(cCells[i+Dpos]);
+            fit=fitness(ICells);
             fes++;
             if(fit<nutrientes.second[i+Dpos]){
-                
+                cCells.first[i+Dpos] = ICells;
+                cCells.second[i+Dpos] = fit;
             }
         }
     }
@@ -160,10 +162,16 @@ void cellInvasivas(int tamPob){
 * fes  : numero de nutrientes consumidos 
 */
 void randomWalk(cell, fes){
-    Celulas newCell, nowCell;
-    int pos=0;
-    pos = Randint(1,D);
-    newCell=cell+a*nowCell/(nowCell*nowCellp);//form 16
+    vector<float> newCell, movedCell;
+    float alpha=0.0;
+    newCell.resize(nutrientes.first.size());
+    movedCell.resize(nutrientes.first.size());
+
+    newCell=generarSolucion(nutrientes.first.size());
+
+    for(int i=0; i<nutrientes.fisrt.size(); i++){
+        movedCell[i]=cCells[cell][i]+alpha*newCell[i]/(newCell[i]*nowCellp);//form 16
+    }
     fitness(newCell);
     fes++;
     if(newCell.nutrientes > cell.nutrientes){
