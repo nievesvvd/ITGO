@@ -4,7 +4,7 @@
 
 using namespace std; 
 
-vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
+vector<float> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
     vector<int> gc;
 
     int PCells=tamPob*0.2;  //vector con los id de las PCells
@@ -30,24 +30,25 @@ vector<double> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
         bestCell=actualCell;
 
         // movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness);
-        movePCells(PCells, gc, max_Gc, fes);
-        moveQCells(PCells, QCells, gc, max_Gc, fes);
-        moveDCells();
-
-        cellInvasivas(PCells, DCells);        
+        movePCells(PCells, gc, fes);
+        moveQCells(PCells, QCells, gc, fes);
+        moveDCells(PCells, QCells, DCells, gc, fes);
+        
+        cellInvasivas(tamPob);
+      
         //establecemos la mejor celula
         actualCell=mejorCelula(PCell);
         if(actualCell < bestCell){
             bestCell=actualCell;
         }
-        actualizarPoblacion(poblacionIni, PCells, QCells, DCells);
+        //actualizarPoblacion(PCells, QCells, DCells);//????
         fes++;
     }
-    return poblacionIni[bestCell[0]];
+    return poblacionIni[bestCell];
 }
 
 /*A continuacion se pondran los metodos de los 4 tipos de celulas*/
-void movePCells(int PCells, vector<vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
+void movePCells(int PCells, vector<int> &gc, int &fes){
     float stp=0.0, move=0.0, fit=0.0;
     pCell=nutrientes.first.size()*0.2;
     vuelo
@@ -66,7 +67,7 @@ void movePCells(int PCells, vector<vector<int> &gc, int max_Gc, vector<Celula> n
     }
 }
 
-void moveQCells(int PCells, int QCells, vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
+void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes){
     float stp=0.0, move=0.0, fit=0.0, beta=0.0;
     int randPCell, proxima1, proxima2;
     vector<float> newCells;
@@ -100,7 +101,7 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int max_Gc, vector<Celu
     }
 }
 
-void moveDCells(int PCells, int QCells, int DCells, vector<int> &gc, int max_Gc, vector<Celula> nutrientes, int &fes, vector<float> bestFitness){
+void moveDCells(int PCells, int QCells, int DCells, vector<int> &gc, int &fes){
     int randPCell, randQCell;
     vector<float> newCells;
     float y;
@@ -163,19 +164,21 @@ void cellInvasivas(int tamPob){
 */
 void randomWalk(cell, fes){
     vector<float> newCell, movedCell;
-    float alpha=0.0;
+    float alpha=0.0, fit;
+    alpha = randFloat(-1, 1.1);
+
     newCell.resize(nutrientes.first.size());
     movedCell.resize(nutrientes.first.size());
 
     newCell=generarSolucion(nutrientes.first.size());
 
     for(int i=0; i<nutrientes.fisrt.size(); i++){
-        movedCell[i]=cCells[cell][i]+alpha*newCell[i]/(newCell[i]*nowCellp);//form 16
+        movedCell[i]=cCells[cell][i]+alpha*newCell[i]/(newCell[i]*newCell[i]);//form 16
     }
-    fitness(newCell);
+    fit=fitness(movedCell);
     fes++;
-    if(newCell.nutrientes > cell.nutrientes){
-        cell=newCell;
-        gc=0;
+    if(fit < nutrientes.second[cell]){
+        cCells[cell]=movedCell;
+        gc[cell]=0;
     }
 }

@@ -7,10 +7,12 @@
 using namespace std;
 
 
-vector<int> algoritmoITGO(double beta, int Dist, int tam, double max_fes);
+vector<float> algoritmoITGO(double beta, int dim, int tamPob, int max_fes);
 
-void movimientoCelulas(vector<vector<float> > cCells, vector<vector<float> > hCells, Celula nutrientes, vector<int> gc, vector<float> bestFitness, int max_Gc);
+void movePCells(int PCells, vector<int> &gc, int &fes);
+void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes);
+void moveDCells(int PCells, int QCells, int DCells,  vector<int> &gc, int &fes);
 
-void cellInvasivas(vector<int> &cPCells, int tamPCells, vector<int> DCells, int gc, int &fes, int max_Gc);
-void randomWalk(vector<float> &cell, int &gc);//return gc actualiza cell
+void cellInvasivas(int tamPob);
+void randomWalk(int cell, vector<int> &gc);
 #endif

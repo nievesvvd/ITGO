@@ -30,14 +30,20 @@ int Max_Gc=10;
 // tam es el tamaño de la poblacion (longitud del vector)
 // poblacion es el numero de individuos que vamos a crear
 **/
-void generarPoblacion(vector<vector<float> > &cCells, vector<vector<float> > &hCells, Celula &nutrientes, int tamPobl, int dim);
-void separarPoblacion(Celula nutrientes, vector<int> &PCells, vector<int> &QCells, vector<int> &DCells);
-void actualizarPoblacion(vector<vector<double> > &poblacionIni, vector<int> PCells, vector<int> QCells, vector<int> DCells);
+void generarPoblacion(int tamPob, int dim);
+void separarPoblacion(int PCells, int QCells, int DCells);
+//void actualizarPoblacion(vector<int> PCells, vector<int> QCells, vector<int> DCells);
 //vector <Celulas> distanciaEuclidea(vector <Celulas> QCells, Celulas cell); cogemos dos cell aleatorias mejor
-
+distanciaEuclidea(int QCells, int &proxima1, int &porxima2);
+float mediaNutrientes(int cellPos, int numCells);
+vector<float> generarSolucion(int tamCell);
 double fitness(vector<double> cell);
-double mediaFitness(vector<vector<double> > DCells);
-double alpha(int fes, int max_fes);
-double levy(double step);
+void actualizarCelula(/*params*/);
+int mejorCelula(PCells);
+
+float step();
+float levy(float step);
+float alpha();
+float beta();
 
 #endif
