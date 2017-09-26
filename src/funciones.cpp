@@ -4,10 +4,11 @@
 
 
 /**generamos una poblacion 
-inicial con los nutrientes de cada celula de forma aleatoria entre 0 y 100 
-* siendo 0 el valor de nutrientes mas bajo y 100 el mas alto (es un valor porcentual)
+inicial con los nutrientes de cada celula de forma aleatoria entre 0 y 1 
+* siendo 0 el valor de nutrientes mas bajo y 1 el mas alto (es un valor porcentual)
+*inicializaremos aqui las matrices cCells, hCells, los nutrientes de cada una y el mejor fitness
 **/
-void generarPoblacion(Celula &nutrientes, int tamPobl, int dim){
+void generarPoblacion(int tamPobl, int dim){
     double fit=0.0;
     float valor=0.0;
     vector<float> filas;
@@ -21,44 +22,41 @@ void generarPoblacion(Celula &nutrientes, int tamPobl, int dim){
         cCell[i].push_back(filas);
         hCell[i].push_back(filas);
         fit=fitness(filas);
-        nutrientes.first[i]=i;
-        nutrientes.second[i]=fit;
+        nutrientes.first[i]=i;      //establecemos el id
+        nutrientes.second[i]=fit;   // establecemos el fitness inicial
     }
 }
 
-/**Separamos los indices de la poblacion una vez ordenada de forma ascendente**/
-void separarPoblacion(Celula nutrientes, vector<Celulas> &PCells, vector<Celulas> &QCells, vector<Celulas> &DCells){
-    int dCells=nutrientes.first.size()*0.2;
-    int qCells=(nutrientes.first.size()*0.6)+dCells;
-
-    for(int i=0; i<nutrientes.first.size(); i++){
-        if(i<=dCells){
-            PCells.push_back(nutrientes.fisrt[i]);
-        }else if(i>dCells && i<=qCells){
-            QCells.push_back(nutrientes.first[i]);
-        }else{
-            DCells.push_back(nutrientes.first[i]);
-        }
-    }
+/**devolvemos para cada variable el tamaño del subgrupo de cells**/
+void separarPoblacion(int &PCells, int &QCells, int &DCells, int tamPobl){
+    PCells = tamPobl*0.2;
+    QCells = tamPobl*0.6;
+    DCells = PCells;
 }
 
-void actualizarCelula(vector<float>newCell, int id, float nutr, int &gc){
+
+/*metodo con el que actualizamos la celula de la posicion pasada
+*teniendo en cuenta el contador de random walk (la parte final de los metodos)
+*/
+void actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fes){
     float fit;
-    fit=fitness(cCells[id]);
     fes++;
+    fit=fitness(cCells[id]);
     if(fit<nutr){
         bestFitness[id] = fit;
-        hCells[id]= newCell;//en hCell guardo el nuevo valor si es mejor
+        hCells[id].swap(newCell);//en hCell guardo el nuevo valor si es mejor
     }else{
-        cCells[id] = newCell;
-        nutrientes.second[id]=fit;
-        gc++;
+        cCells[id].swap(newCell);
+        nutrientes.second[id]=fit;  //si no gurdamos el nuevo generado y actualizamos los valores
+        gc++;                       //incrementamos el contador de randomwalk
     }
     if(gc[nutrientes.first[i]]>max_Gc){
-        randomWalk(cCells[id], gc);
+        randomWalk(cCells[id], gc[id]);
+        fes++;
     }
 }
 
+/*metodo con el que calcular el valor medio de los nutrientes de las DCells*/
 float mediaNutrientes(int Dpos, int pobl){
     float resultado=0.0;
     for(int i=0; i<pobl; i++){
@@ -66,6 +64,22 @@ float mediaNutrientes(int Dpos, int pobl){
     }
     return resultado;
 }
+
+/////////////////////////////TODO/////////////////////////////
+/*metodo con el que calculamos la distancia euclidea entre las QCells*/
+void distanciaEuclidea(int QCells, int &proxima1, int &porxima2){
+
+}
+vector<float> generarSolucion(int tamCell){
+    
+}
+double fitness(vector<double> cell){
+
+}
+int mejorCelula(PCells){
+
+}
+/////////////////////////////TODO/////////////////////////////
 
 float alpha(int fes, int max_fes){
     float valor=0.0, rnd=0.0;

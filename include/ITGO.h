@@ -14,5 +14,5 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes);
 void moveDCells(int PCells, int QCells, int DCells,  vector<int> &gc, int &fes);
 
 void cellInvasivas(int tamPob);
-void randomWalk(int cell, vector<int> &gc);
+void randomWalk(int cell, int &gc);
 #endif

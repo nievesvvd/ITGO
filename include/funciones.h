@@ -22,7 +22,7 @@ public:
 vector<vector<float> >cCells;
 vector<vector<float> >hCells;
 vector<Celula> nutrientes;
-vector<float> bestFitness;
+vector<float> bestFitness;	//vector en el que en cada posicion guardamos el valor del mejor fitness encontrado 
 int Max_Gc=10;
 //**************************** Ayuda para el pair ****************************//
 
@@ -31,19 +31,21 @@ int Max_Gc=10;
 // poblacion es el numero de individuos que vamos a crear
 **/
 void generarPoblacion(int tamPob, int dim);
-void separarPoblacion(int PCells, int QCells, int DCells);
+void separarPoblacion(int &PCells, int &QCells, int &DCells, int tamPob);
+vector<float> generarSolucion(int tamCell);
 //void actualizarPoblacion(vector<int> PCells, vector<int> QCells, vector<int> DCells);
 //vector <Celulas> distanciaEuclidea(vector <Celulas> QCells, Celulas cell); cogemos dos cell aleatorias mejor
-distanciaEuclidea(int QCells, int &proxima1, int &porxima2);
+void actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fes);
 float mediaNutrientes(int cellPos, int numCells);
-vector<float> generarSolucion(int tamCell);
+
+void distanciaEuclidea(int QCells, int &proxima1, int &porxima2);
 double fitness(vector<double> cell);
-void actualizarCelula(/*params*/);
 int mejorCelula(PCells);
 
-float step();
-float levy(float step);
 float alpha();
+float levy(float step);
+float step();
+float sigma();
 float beta();
 
 #endif

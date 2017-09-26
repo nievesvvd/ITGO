@@ -61,7 +61,7 @@ void movePCells(int PCells, vector<int> &gc, int &fes){
             move=levy(stp);
             newCells[j]= cCells[nutrientes.first[i]][j]+alpha()*move;
         }
-        actualizarCelula(newCells, i, nutrientes.second[i], gc[i]);
+        actualizarCelula(newCells, i, nutrientes.second[i], gc[i], fes);
         newCells.clear();
         newCells.resize(poblacionIni[0].size());
     }
@@ -95,7 +95,7 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes){
                 }
             }
         }
-        actualizarCelula(newCells, i+PCells, nutrientes.second[i+PCells], gc[i+PCells]);
+        actualizarCelula(newCells, i+PCells, nutrientes.second[i+PCells], gc[i+PCells], fes);
         newCells.clear();
         newCells.resize(poblacionIni[0].size());
     }
@@ -131,7 +131,7 @@ void moveDCells(int PCells, int QCells, int DCells, vector<int> &gc, int &fes){
 void cellInvasivas(int tamPob){
     int randPCell, Dpos, pos=0;
     float med=0.0, fit=0.0;
-    Dpos = tamPob - tamPob*0.2;
+    Dpos = tamPob - tamPob*0.2;//pos de la primera cell del conjunto DCell
     vector<float> newCells, ICells;
     newCells.resize(nutrientes.first.size());
     ICells.resize(nutrientes.first.size());
@@ -162,7 +162,7 @@ void cellInvasivas(int tamPob){
 * gc   : su valor de crecimiento
 * fes  : numero de nutrientes consumidos 
 */
-void randomWalk(cell, fes){
+void randomWalk(cell, gc){
     vector<float> newCell, movedCell;
     float alpha=0.0, fit;
     alpha = randFloat(-1, 1.1);
@@ -176,7 +176,6 @@ void randomWalk(cell, fes){
         movedCell[i]=cCells[cell][i]+alpha*newCell[i]/(newCell[i]*newCell[i]);//form 16
     }
     fit=fitness(movedCell);
-    fes++;
     if(fit < nutrientes.second[cell]){
         cCells[cell]=movedCell;
         gc[cell]=0;
