@@ -60,8 +60,9 @@ void actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fe
 float mediaNutrientes(int Dpos, int pobl){
     float resultado=0.0;
     for(int i=0; i<pobl; i++){
-        resultado=( resultado+(nutrientes.second[Dpos+i]) )/pobl;
+        resultado += nutrientes.second[Dpos+i];
     }
+    resultado=resultado/pobl;
     return resultado;
 }
 
@@ -70,12 +71,22 @@ float mediaNutrientes(int Dpos, int pobl){
 void distanciaEuclidea(int QCells, int &proxima1, int &porxima2){
 
 }
+
 vector<float> generarSolucion(int tamCell){
-    
+    vector<float> newCell;
+    newCell.size(tamCell);
+    float valor=0.0;
+
+    for(int i=0; i<tamCell; i++){
+        valor=Rand();
+        newCell[i] = valor;
+    }
+    return newCell;
 }
 double fitness(vector<double> cell){
 
 }
+
 int mejorCelula(PCells){
 
 }
