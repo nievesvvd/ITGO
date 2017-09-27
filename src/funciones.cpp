@@ -72,6 +72,12 @@ void distanciaEuclidea(int QCells, int &proxima1, int &porxima2){
 
 }
 
+/*funcion con la que calculamos el fitness de cada celula*/
+double fitness(vector<double> cell){
+
+}
+/////////////////////////////TODO/////////////////////////////
+
 vector<float> generarSolucion(int tamCell){
     vector<float> newCell;
     newCell.size(tamCell);
@@ -83,14 +89,11 @@ vector<float> generarSolucion(int tamCell){
     }
     return newCell;
 }
-double fitness(vector<double> cell){
 
-}
-
+/*devuelve el indice de la primera cell de los nutrientes (ordenados de mejor a peor)*/
 int mejorCelula(PCells){
-
+    return cCells[nutrientes.first[0]];
 }
-/////////////////////////////TODO/////////////////////////////
 
 float alpha(int fes, int max_fes){
     float valor=0.0, rnd=0.0;
@@ -104,7 +107,6 @@ float levy(float s){
     w=rand(0,2);
     valor=pow(s, -1-w);
     return valor;
-
 }
 
 float step(){
