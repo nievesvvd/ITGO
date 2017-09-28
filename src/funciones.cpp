@@ -66,12 +66,11 @@ float mediaNutrientes(int Dpos, int pobl){
     return resultado;
 }
 
-/////////////////////////////TODO/////////////////////////////
 /*metodo con el que calculamos la distancia euclidea entre las QCells*/
 void distanciaEuclidea(int QCells, vector<Distancia> &distancias, int begin, int end){
     Distancias resultado;
     double sumatoria=0.0;
-
+    
     //sort de menos distancia a mas
     for(int i=begin; i<end-1; i++){//recorremos la pobacion de 1º vez
         for(int j=i+1; j<end; j++){//para cada cell recorremos las demas sin contar a ella misma ( eso el +1)
@@ -101,10 +100,12 @@ void cellCercanas(int &proxima1, int &proxima2){
         proxima2=distancias.pto2[1];
     }
 }
+/////////////////////////////TODO/////////////////////////////
 /*funcion con la que calculamos el fitness de cada celula*/
 double fitness(vector<double> cell){
 
 }
+/*y las cosas de euler, steps longitud y tal de PCells y de invasive cella*/
 /////////////////////////////TODO/////////////////////////////
 
 vector<float> generarSolucion(int tamCell){
