@@ -87,7 +87,7 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes){
                 if(rand()<= 0.5){
                     newCells[j] = cCells[nutrientes.first[i+PCells]][j]+(beta*stp*
                         (hCells[nutrientes.first[randPCell]][j]-cCells[nutrientes.first[i]][j]) )+
-                        (beta*stp*(cCells[nutrientes.first[proxima1]][j])-cCells[nutrientes.first[proxima2]][j]) ) );
+                        (beta*stp*(cCells[nutrientes.first[proxima1]][j])-cCells[nutrientes.first[proxima2]][j]) ;
                 }else{
                     newCells[j] = cCells[nutrientes.first[i+PCells]][j]+ (beta*stp*
                         ( cCells[nutrientes.first[randPCell]][j] - cCells[nutrientes.first[i+PCells]][j]) )+

@@ -19,6 +19,19 @@ public:
     return individuo1.second < individuo2.second;
   }
 };
+
+struct Distancias{
+	int pto1;
+	int pto2;
+	double dist;
+	Distancias(int &p1, int &p2, float &dst) : pto1(p1), pto2(p2), dist(dst){}
+
+	bool operator > (float distancia) const{
+		return (dist > distancia.dist);
+	}
+};
+
+
 vector<vector<float> >cCells;
 vector<vector<float> >hCells;
 vector<Celula> nutrientes;

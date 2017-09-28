@@ -68,7 +68,29 @@ float mediaNutrientes(int Dpos, int pobl){
 /////////////////////////////TODO/////////////////////////////
 /*metodo con el que calculamos la distancia euclidea entre las QCells*/
 void distanciaEuclidea(int QCells, int &proxima1, int &porxima2){
+    vector<Distancias> distancias;
+    Distancias resultado;
+    double sumatoria=0.0, resultado=0.0;
 
+    //sort de menos distancia a mas
+    for(int i=0; i<nutrientes.first.size()-1; i++){//recorremos la pobacion de 1º vez
+        for(int j=i+1; j<nutrientes.first.seze(); j++){//para cada cell recorremos las demas sin contar a ella misma ( eso el +1)
+            for(int k=0; k<cCells[0].size(); k++){//calculamos la distancia entre las 2 celulas
+                sumatoria+= pow(cCells[ì][k]-cCells[j][k], 2);
+            }
+            resultado.pto1=i;
+            resultado.pto2=j;
+            resultado.dist=sqrt(sumatoria);
+            distancias.push_back(resultado);
+            sumatoria=0.0;
+        }
+    }
+    distancias.sort();
+    for(int l=0; l<distancias.size(); l++){
+        if (QCells==poto1 || QCells==pto2){
+            
+        }
+    }
 }
 vector<float> generarSolucion(int tamCell){
     
