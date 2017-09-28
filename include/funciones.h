@@ -51,7 +51,8 @@ vector<float> generarSolucion(int tamCell);
 void actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fes);
 float mediaNutrientes(int cellPos, int numCells);
 
-void distanciaEuclidea(int QCells, int &proxima1, int &porxima2);
+void distanciaEuclidea(int QCells, vector<Distancias> &distancias, int begin, int end);
+void cellCercanas(int &proxima1, int &proxima2);
 double fitness(vector<double> cell);
 int mejorCelula(PCells);
 

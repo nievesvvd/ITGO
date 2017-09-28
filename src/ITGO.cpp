@@ -68,15 +68,21 @@ void movePCells(int PCells, vector<int> &gc, int &fes){
 }
 
 void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes){
+    vector<Distancias> distancias;
     float stp=0.0, move=0.0, fit=0.0, beta=0.0;
     int randPCell, proxima1, proxima2;
+    int begin, end;
     vector<float> newCells;
     newCells.resize(nutrientes.first.size());
+    distancias.resize(QCells);
     qCell=nutrientes.first.size()*0.6+pCell;
+    begin = pCells;
+    end = begin+QCells-1;
     
     for(int i=0; i<QCells; i++){
         randPCell=Randint(0, (nutrientes.first.size()*0.2)-1);
-        distanciaEuclidea(QCells, poblacionIni, proxima1, proxima2);
+        distanciaEuclidea(QCells, poblacionIni, begin, end);
+        cellCercanas(proxima1, proxima2);
         //faltan los pasos
         beta=beta();
         move=step(beta);

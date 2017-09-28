@@ -68,15 +68,13 @@ float mediaNutrientes(int Dpos, int pobl){
 
 /////////////////////////////TODO/////////////////////////////
 /*metodo con el que calculamos la distancia euclidea entre las QCells*/
-void distanciaEuclidea(int QCells, int &proxima1, int &porxima2){
-    vector<Distancias> distancias;
+void distanciaEuclidea(int QCells, vector<Distancia> &distancias, int begin, int end){
     Distancias resultado;
-    double sumatoria=0.0, resultado=0.0;
-    vector<int> cercanas;
+    double sumatoria=0.0;
 
     //sort de menos distancia a mas
-    for(int i=0; i<nutrientes.first.size()-1; i++){//recorremos la pobacion de 1º vez
-        for(int j=i+1; j<nutrientes.first.seze(); j++){//para cada cell recorremos las demas sin contar a ella misma ( eso el +1)
+    for(int i=begin; i<end-1; i++){//recorremos la pobacion de 1º vez
+        for(int j=i+1; j<end; j++){//para cada cell recorremos las demas sin contar a ella misma ( eso el +1)
             for(int k=0; k<cCells[0].size(); k++){//calculamos la distancia entre las 2 celulas
                 sumatoria+= pow(cCells[ì][k]-cCells[j][k], 2);
             }
@@ -88,15 +86,21 @@ void distanciaEuclidea(int QCells, int &proxima1, int &porxima2){
         }
     }
     distancias.sort();
-    for(int l=0; l<distancias.size(); l++){
-        if (QCells==resultado.pto1[l]){
-            cercanas.push_back(resultado.pto2[l]);
-        }else if(QCells==resultado.pto2[l]){
-            cercanas.push_back(resultado.pto1[l]);
-        }
-    }
 }
 
+//actualizamos las dos celulas más cercana a QCell si que sea ella
+void cellCercanas(int &proxima1, int &proxima2){
+    if(distancias.pto1[0]==QCells){
+        proxima1=distancias.pto1[0];
+    }else{
+        proxima1=distancias.pto2[0];
+    }
+    if(distancias.pto1[1]==QCells){
+        proxima2=distancias.pto1[1];
+    }else{
+        proxima2=distancias.pto2[1];
+    }
+}
 /*funcion con la que calculamos el fitness de cada celula*/
 double fitness(vector<double> cell){
 
