@@ -72,6 +72,7 @@ void distanciaEuclidea(int QCells, int &proxima1, int &porxima2){
     vector<Distancias> distancias;
     Distancias resultado;
     double sumatoria=0.0, resultado=0.0;
+    vector<int> cercanas;
 
     //sort de menos distancia a mas
     for(int i=0; i<nutrientes.first.size()-1; i++){//recorremos la pobacion de 1º vez
@@ -88,8 +89,10 @@ void distanciaEuclidea(int QCells, int &proxima1, int &porxima2){
     }
     distancias.sort();
     for(int l=0; l<distancias.size(); l++){
-        if (QCells==poto1 || QCells==pto2){
-            
+        if (QCells==resultado.pto1[l]){
+            cercanas.push_back(resultado.pto2[l]);
+        }else if(QCells==resultado.pto2[l]){
+            cercanas.push_back(resultado.pto1[l]);
         }
     }
 }
