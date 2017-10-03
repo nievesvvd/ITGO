@@ -140,16 +140,38 @@ float levy(float s){
 }
 
 float step(){
-    float valor=0.0, u=0.0, v=0.0, w=0.0;
-    w=Rand();
-    v=pow(sigma(),2);
+    float valor=0.0, u=0.0, v=0.0, w=0.0, aux=0.0;
+    
+    aux=sigma();
+    w=rand(0.3,1.99);
+    u=normalDisrt(1.0);
+    v=pow(normalDisrt(aux),2);
+    
     valor=u/pow(v,1/w);
     return valor;
 }
 
-float sigma(){
+float sigma(){//step de las Pcells
+    float w=0.0;
+
+    w=rand(0.3, 1.99);
+
     return 0.0;
 }
-float beta(){
-    return 0.0;
+double beta(){//qCells, para el step size cuando se mueven
+    double normal=0.0; 
+    double rand=0.0, beta=0.0;
+    
+    normal = normalDisrt(1.0); //Generate numbers;
+    rand=Rand();
+    bta=normal*rand;
+
+    return beta;
+}
+
+double normalDisrt(double second){
+    std::default_random_engine de(time(0)); //seed
+    std::normal_distribution<int> nd(0, second); //mean followed by stdiv
+    valor = nd(de); //Generate numbers;
+    return valor;
 }

@@ -6,6 +6,7 @@
 #include <utility>      //Para el pair
 #include <math>         //para el levy fight
 #include "random_ppio.h"
+#include <random>
 
 using namespace std;
 
@@ -61,5 +62,6 @@ float levy(float step);
 float step();
 float sigma();
 float beta();
+double normalDisrt(double second);
 
 #endif
