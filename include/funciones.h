@@ -4,11 +4,13 @@
 #include <vector>
 #include <algorithm>    // std::random_shuffle
 #include <utility>      //Para el pair
-#include <math>         //para el levy fight
+#include <math.h>         //para el levy fight
 #include "random_ppio.h"
 #include <random>
 
 using namespace std;
+
+#define PI 3.14159265
 
 //**************************** Ayuda para el pair ****************************//
 typedef std::pair <std::vector <int>, double> Celula;   //pos 1 del pais es el id, y la ps2 el valor de los nutrientes
@@ -55,9 +57,9 @@ float mediaNutrientes(int cellPos, int numCells);
 void distanciaEuclidea(int QCells, vector<Distancias> &distancias, int begin, int end);
 void cellCercanas(int &proxima1, int &proxima2);
 double fitness(vector<double> cell);
-int mejorCelula(PCells);
+int mejorCelula();
 
-float alpha();
+float alpha(int fes, int max_fes);
 float levy(float step);
 float step();
 float sigma();

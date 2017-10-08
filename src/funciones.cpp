@@ -121,8 +121,8 @@ vector<float> generarSolucion(int tamCell){
 }
 
 /*devuelve el indice de la primera cell de los nutrientes (ordenados de mejor a peor)*/
-int mejorCelula(PCells){
-    return cCells[nutrientes.first[0]];
+int mejorCelula(){
+    return nutrientes.first[0];
 }
 
 float alpha(int fes, int max_fes){
@@ -152,11 +152,12 @@ float step(){
 }
 
 float sigma(){//step de las Pcells
-    float w=0.0;
+    float w=1.5, valor=0.0;
 
-    w=rand(0.3, 1.99);
+    valor= pow((tgammaf(1+w)*sin((PI*w)/2) ) / 
+            ( tgammaf((1+w)/2)*w*pow(2,(w-1)/2) ),1/w);
 
-    return 0.0;
+    return valor;
 }
 double beta(){//qCells, para el step size cuando se mueven
     double normal=0.0; 

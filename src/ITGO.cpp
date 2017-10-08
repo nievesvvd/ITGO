@@ -37,7 +37,7 @@ vector<float> algoritmoITGO(double beta, int dim, int tamPob, int max_fes){
         cellInvasivas(tamPob);
       
         //establecemos la mejor celula
-        actualCell=mejorCelula(PCell);
+        actualCell=mejorCelula();
         if(actualCell < bestCell){
             bestCell=actualCell;
         }
