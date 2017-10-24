@@ -6,20 +6,20 @@
 #include <utility>      //Para el pair
 #include <math.h>         //para el levy fight
 #include "random_ppio.h"
-#include <random>
+//#include <random>
 
 using namespace std;
 
 #define PI 3.14159265
 
 //**************************** Ayuda para el pair ****************************//
-typedef std::pair <std::vector <int>, double> Celula;   //pos 1 del pais es el id, y la ps2 el valor de los nutrientes
+typedef std::pair <int, float> Celula;   //pos 1 del pais es el id, y la ps2 el valor de los nutrientes
 
 class compararCelulas{ //Comparador de la PQ. Devuelve TRUE si coste de cell1 es mayor que coste de cell2
 public:
     compararCelulas(){}
   bool operator()(const Celula cell1, const Celula cell2){
-    return individuo1.second < individuo2.second;
+    return cell1.second < cell2.second;
   }
 };
 
@@ -27,12 +27,18 @@ struct Distancias{
 	int pto1;
 	int pto2;
 	double dist;
-	Distancias(int &p1, int &p2, float &dst) : pto1(p1), pto2(p2), dist(dst){}
+	//Distancias(int &p1, int &p2, float &dst) : pto1(p1), pto2(p2), dist(dst){}
 
-	bool operator > (float distancia) const{
-		return (dist > distancia.dist);
+	bool operator > (double distancia) const{
+		return (dist > distancia);
 	}
 };
+
+struct DistanciaMenor {
+	bool operator() (Distancias i, Distancias j) {
+		return i.dist < j.dist;
+	}
+}DistanciaMenorComparator;
 
 
 vector<vector<float> >cCells;
@@ -51,19 +57,19 @@ void separarPoblacion(int &PCells, int &QCells, int &DCells, int tamPob);
 vector<float> generarSolucion(int tamCell);
 //void actualizarPoblacion(vector<int> PCells, vector<int> QCells, vector<int> DCells);
 //vector <Celulas> distanciaEuclidea(vector <Celulas> QCells, Celulas cell); cogemos dos cell aleatorias mejor
-void actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fes);
+bool actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fes);
 float mediaNutrientes(int cellPos, int numCells);
 
-void distanciaEuclidea(int QCells, vector<Distancias> &distancias, int begin, int end);
-void cellCercanas(int &proxima1, int &proxima2);
-double fitness(vector<double> cell);
+void distanciaEuclidea(int QCells, vector<Distancias> &distancia, int begin, int end);
+void cellCercanas(int QCells, int &proxima1, int &proxima2, vector<Distancias> distancias);
+float fitness(vector<float> cell);
 int mejorCelula();
 
 float alpha(int fes, int max_fes);
 float levy(float step);
 float step();
 float sigma();
-float beta();
+double beta();
 double normalDisrt(double second);
 
 #endif

@@ -4,7 +4,7 @@
 #define __RANDOM_PPIO_H
 
 /* Inicializa la semilla al valor 'x'.
-   Solo debe llamarse a esta funcion una vez en todo el programa */
+   Solo debe llamarse a esta funcion una vez en tod el programa */
 void Set_random (unsigned long x);
 
 /* Devuelve el valor actual de la semilla */

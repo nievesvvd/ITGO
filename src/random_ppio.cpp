@@ -11,7 +11,7 @@ void Set_random (unsigned long x)
 /* Inicializa la semilla al valor x.
    Solo debe llamarse a esta funcion una vez en todo el programa */
 {
-    Seed = (unsigned long) x;
+    Seed = (unsigned long)x;
 }
 
 unsigned long Get_random (void)
