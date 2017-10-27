@@ -4,6 +4,11 @@
 #include <vector>
 #include <algorithm>
 
+vector<vector<float> >cCells;
+vector<vector<float> >hCells;
+vector<Celula> nutrientes;
+vector<float> bestFitness;	//vector en el que en cada posicion guardamos el valor del mejor fitness encontrado
+
 
 /**generamos una poblacion 
 inicial con los nutrientes de cada celula de forma aleatoria entre 0 y 1 
@@ -42,7 +47,7 @@ void separarPoblacion(int &PCells, int &QCells, int &DCells, int tamPobl){
 /*metodo con el que actualizamos la celula de la posicion pasada
 *teniendo en cuenta el contador de random walk (la parte final de los metodos)
 */
-bool actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fes){
+bool actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fes, int max_Gc){
     float fit;
     fes++;
     bool walk=false;
@@ -55,7 +60,7 @@ bool actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fe
         nutrientes[id].second=fit;  //si no gurdamos el nuevo generado y actualizamos los valores
         gc++;                       //incrementamos el contador de randomwalk
     }
-    if(gc>Max_Gc){
+    if(gc>max_Gc){
         // randomWalk(cCells[id], gc[id]);
         walk=true;
         fes++;
