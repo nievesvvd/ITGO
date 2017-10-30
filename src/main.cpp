@@ -8,6 +8,7 @@
 
 using namespace std;
 
+//dimension tampob, iter
 int main (int argc, char *argv[]) { 
     // if(argc !=10){
     //     cout << "Número de parámetros incorrecto."
@@ -24,7 +25,9 @@ int main (int argc, char *argv[]) {
         Set_random(seed);
     }
 
+    solucionITGO.resize(atoi(argv[1]));
     start = clock();
+    cout<<"llamamos al metodo" << endl;
     solucionITGO = algoritmoITGO(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
     timeITGO = ((double)clock() - start) / CLOCKS_PER_SEC;
     tam=solucionITGO.size();

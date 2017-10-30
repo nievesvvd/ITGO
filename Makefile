@@ -6,8 +6,8 @@ LIB = lib
 SRC = src
 CXXFLAGS =-Wall -g -std=c++11 -c -O1
 
-main:$(OBJ)/main.o $(OBJ)/funciones.o $(OBJ)/ITGO.o $(OBJ)/random_ppio.o
-	$(CXX) -o main $^
+$(BIN)/main:$(OBJ)/main.o $(OBJ)/funciones.o $(OBJ)/ITGO.o $(OBJ)/random_ppio.o
+	$(CXX) -o $(BIN)/main $^
 
 $(OBJ)/main.o: $(SRC)/main.cpp
 	$(CXX) $(CXXFLAGS) $(SRC)/main.cpp -o $(OBJ)/main.o -I$(INC)

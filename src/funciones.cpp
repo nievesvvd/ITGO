@@ -15,25 +15,27 @@ inicial con los nutrientes de cada celula de forma aleatoria entre 0 y 1
 * siendo 0 el valor de nutrientes mas bajo y 1 el mas alto (es un valor porcentual)
 *inicializaremos aqui las matrices cCells, hCells, los nutrientes de cada una y el mejor fitness
 **/
-void generarPoblacion(int tamPobl, int dim){
-    double fit=0.0;
-    float valor=0.0;
+void generarPoblacion(int tamPobl, int dim){    
     vector<float> filas;
-    filas.resize(dim, 0);
-    Celula cell;
-
+    cCells.resize(tamPobl);
+    hCells.resize(tamPobl);
+    nutrientes.resize(tamPobl);
+    
     for(int i=0; i<tamPobl; i++){
-        for(int j=0; j<tamPobl; j++){
-            valor=Rand();
-            filas.push_back(valor);
-            cCells[i].push_back(valor);
-            hCells[i].push_back(valor);
+        for(int j=0; j<dim; j++){
+            filas.push_back(Rand());
         }
-        fit=fitness(filas);
+        cCells[i].resize(dim);
+        hCells[i].resize(dim);
+        cCells[i] = filas;
+        hCells[i] = filas;
+
         nutrientes[i].first=i;      //establecemos el id
-        nutrientes[i].second=fit;   // establecemos el fitness inicial
+        nutrientes[i].second=fitness(filas);   // establecemos el fitness inicial
+        filas.clear();
         // nutrientes[i].push_back(cell);
     }
+
 }
 
 /**devolvemos para cada variable el tamaño del subgrupo de cells**/

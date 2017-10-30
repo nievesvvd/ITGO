@@ -1,6 +1,6 @@
 #include <vector>
-#include <iostream>
 #include "ITGO.h"
+#include <iostream>
 
 using namespace std; 
 
@@ -12,22 +12,21 @@ vector<float> algoritmoITGO(/*double beta,*/ int dim, int tamPob, int max_fes){
     int QCells=tamPob*0.6;  //vector con los id de las QCells
     int DCells=tamPob*0.2;  //vector con los id de las DCells
 
-    int bestCell=0, actualCell;   //guarda el id de la mejor celula
+    int bestCell = 0, actualCell;   //guarda el id de la mejor celula
     int fes=0;
     int max_Gc=0.7*dim;
 
-    nutrientes.resize(tamPob);
+    
+    
     bestFitness.resize(tamPob);
     best.resize(tamPob+1);
     gc.resize(tamPob);
- 
+    
     //generamos una poblacion de forma aleatoria dado un tam determinado
     generarPoblacion(tamPob, dim);//el fitness buscamos el minimo posible
     while(fes<max_fes){
         sort(nutrientes.begin(), nutrientes.end());  //ordenamos las celulas segun su nivel de nutrientes de menos a mayor
-
         separarPoblacion(PCells, QCells, DCells, tamPob);//20/60/20
-      
         actualCell=nutrientes[0].first;//la primera vez establecemos la mejor celula como la 1 de mejor fitness
         bestCell=actualCell;
 
@@ -35,8 +34,11 @@ vector<float> algoritmoITGO(/*double beta,*/ int dim, int tamPob, int max_fes){
         movePCells(PCells, gc, fes, max_Gc, max_fes);
         moveQCells(PCells, QCells, gc, fes, max_Gc, max_fes);
         moveDCells(PCells, QCells, DCells, gc, fes, max_Gc);
-        
+
+        cout << "--------------------hasta aqui-----------------" << endl;
+
         cellInvasivas(tamPob, fes);
+        cout << "--------------------INVASIVAS-----------------" << endl;
       
         //establecemos la mejor celula
         actualCell=mejorCelula();
@@ -157,21 +159,27 @@ void cellInvasivas(int tamPob, int &fes){
     vector<float> newCells, ICells;
     newCells.resize(nutrientes.size());
     ICells.resize(nutrientes.size());
-
-    for(int i=0; i<tamPob; i++){
+    cout << "pre for" << endl;
+    for(int i=0; i<tamPob; i++){ //TODO modificar este for pra que recorr el conjunto de cel apropiado para poder sumar pcell +i
         randPCell=Randint(0, (nutrientes.size()*0.2)-1);
         med=mediaNutrientes(Dpos, tamPob*0.2);
+        cout << "calculamos la media con i= " << i << endl;
         if(nutrientes[Dpos+i].second<med){
             newCells=generarSolucion(nutrientes.size());//generamos un vector del tam de las cells
+            cout << "generamos la solucioncon i= " << i << endl;
             for(int j=0; j<nutrientes[0].first; j++){
                 ICells[j] = cCells[nutrientes[randPCell].first][j] +
                 rand()*( newCells[j]-cCells[nutrientes[randPCell].first][j] ); ///!!!!
+                cout << "ICells[j]=" << ICells[j] << endl;
             }
 
             //actualizarCelula(newCells, i+Dpos, nutrientes.second[i+Dpos] );
             fit=fitness(ICells);
+            cout << "actualizamos fitness" << endl;
             fes++;
+            cout << "[i+Dpos]=" << i+Dpos << endl;
             if(fit<nutrientes[i+Dpos].second){
+                cout << "[i+Dpos]=" << i+Dpos << endl;
                 cCells[i+Dpos].swap(ICells);
                 nutrientes[i+Dpos].second = fit;
             }
