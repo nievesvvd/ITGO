@@ -44,7 +44,7 @@ struct DistanciaMenor {
 extern vector<vector<float> >cCells;
 extern vector<vector<float> >hCells;
 extern vector<Celula> nutrientes;
-extern vector<Celula> bestFitness;	//vector en el que en cada posicion guardamos el valor del mejor fitness encontrado
+extern vector<Celula> bestFitness; //vector en el que en cada posicion guardamos el valor del mejor fitness encontrado
 //int Max_Gc=10;
 //**************************** Ayuda para el pair ****************************//
 

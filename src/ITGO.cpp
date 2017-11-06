@@ -20,7 +20,7 @@ vector<float> algoritmoITGO(/*double beta,*/ int dim, int tamPob, int max_fes){
     
     //bestFitness.resize(tamPob);
     best.resize(dim+1);//valor donde guardamos la celula mejor
-    gc.resize(tamPob);
+    gc.resize(tamPob,0);
     
     //generamos una poblacion de forma aleatoria dado un tam determinado
     generarPoblacion(tamPob, dim);//el fitness buscamos el minimo posible
