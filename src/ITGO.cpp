@@ -18,38 +18,41 @@ vector<float> algoritmoITGO(/*double beta,*/ int dim, int tamPob, int max_fes){
 
     
     
-    bestFitness.resize(tamPob);
-    best.resize(tamPob+1);
+    //bestFitness.resize(tamPob);
+    best.resize(dim+1);//valor donde guardamos la celula mejor
     gc.resize(tamPob);
     
     //generamos una poblacion de forma aleatoria dado un tam determinado
     generarPoblacion(tamPob, dim);//el fitness buscamos el minimo posible
+    //cout << "no llega fijo" << endl;
     while(fes<max_fes){
         sort(nutrientes.begin(), nutrientes.end());  //ordenamos las celulas segun su nivel de nutrientes de menos a mayor
+        sort(bestFitness.begin(), bestFitness.end());    //ordenamos las celulas segun su nivel de nutrientes de menos a mayor
         separarPoblacion(PCells, QCells, DCells, tamPob);//20/60/20
-        actualCell=nutrientes[0].first;//la primera vez establecemos la mejor celula como la 1 de mejor fitness
+       // cout << "separa pobl" << endl;
+        actualCell=bestFitness[0].first;//la primera vez establecemos la mejor celula como la 1 de mejor fitness
         bestCell=actualCell;
 
         // movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness);
         movePCells(PCells, gc, fes, max_Gc, max_fes);
+        //cout << "pcell" << endl;
         moveQCells(PCells, QCells, gc, fes, max_Gc, max_fes);
+        //cout << "qcell" << endl;
         moveDCells(PCells, QCells, DCells, gc, fes, max_Gc);
-
-        cout << "--------------------hasta aqui-----------------" << endl;
+        //cout << "dcell" << endl;
 
         cellInvasivas(tamPob, fes);
-        cout << "--------------------INVASIVAS-----------------" << endl;
       
         //establecemos la mejor celula
         actualCell=mejorCelula();
-        if(actualCell < bestCell){
+        if(fitness(hCells[actualCell]) <= bestFitness[0].second){
             bestCell=actualCell;
         }
         //actualizarPoblacion(PCells, QCells, DCells);//????
         fes++;
     }
     hCells[bestCell].swap(best);
-    best.push_back(nutrientes[bestCell].second);
+    best.push_back(bestFitness[bestCell].second);
     return best;
 }
 
@@ -84,7 +87,7 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, i
     int begin, end;
     bool walk=false;
     vector<float> newCells;
-    newCells.resize(nutrientes.size());
+    newCells.resize(cCells[0].size());
     distancias.resize(QCells);
     //qCell=nutrientes.size()*0.6+pCell;
     begin = PCells;
@@ -93,12 +96,15 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, i
     for(int i=0; i<QCells; i++){
         randPCell=Randint(0, (nutrientes.size()*0.2)-1);
         distanciaEuclidea(QCells, distancias, begin, end);
+        //cout << "Distancia Euc" << endl;
         cellCercanas(QCells, proxima1, proxima2, distancias);
+        //cout << "cell cercana" << endl;
         stp=(float)step();
         bta=(float)beta();
         //move=step();
         for(unsigned int j=0; j<cCells[0].size(); j++){
             mute=Randfloat(0, 1.8);
+            //cout << "Mute:" << mute << endl;
             if(mute > exp(fes/max_fes-1)){
             //se produce la mutacion
                 if(rand()<= 0.5){
@@ -113,6 +119,7 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, i
             }
         }
         walk=actualizarCelula(newCells, i+PCells, nutrientes[i+PCells].second, gc[i+PCells], fes, max_Gc);
+        //cout<< "Actualiza cell" << endl;
         if(walk){
             randomWalk(i+PCells, gc[i+PCells]);
         }
@@ -127,7 +134,7 @@ void moveDCells(int PCells, int QCells, int DCells, vector<int> &gc, int &fes, i
     bool walk=false;
     float y;
     y = Randfloat(-1, 1.1);
-    newCells.resize(nutrientes.size());
+    newCells.resize(cCells[0].size());
 
     for(int i=0; i<DCells; i++){
         randPCell=Randint(0, (nutrientes.size()*0.2)-1);
@@ -159,27 +166,25 @@ void cellInvasivas(int tamPob, int &fes){
     vector<float> newCells, ICells;
     newCells.resize(nutrientes.size());
     ICells.resize(nutrientes.size());
-    cout << "pre for" << endl;
-    for(int i=0; i<tamPob; i++){ //TODO modificar este for pra que recorr el conjunto de cel apropiado para poder sumar pcell +i
+    for(int i=0; i<tamPob*0.2; i++){ //TODO modificar este for pra que recorr el conjunto de cel apropiado para poder sumar pcell +i
         randPCell=Randint(0, (nutrientes.size()*0.2)-1);
         med=mediaNutrientes(Dpos, tamPob*0.2);
-        cout << "calculamos la media con i= " << i << endl;
         if(nutrientes[Dpos+i].second<med){
             newCells=generarSolucion(nutrientes.size());//generamos un vector del tam de las cells
-            cout << "generamos la solucioncon i= " << i << endl;
             for(int j=0; j<nutrientes[0].first; j++){
                 ICells[j] = cCells[nutrientes[randPCell].first][j] +
                 rand()*( newCells[j]-cCells[nutrientes[randPCell].first][j] ); ///!!!!
-                cout << "ICells[j]=" << ICells[j] << endl;
             }
 
             //actualizarCelula(newCells, i+Dpos, nutrientes.second[i+Dpos] );
             fit=fitness(ICells);
-            cout << "actualizamos fitness" << endl;
             fes++;
-            cout << "[i+Dpos]=" << i+Dpos << endl;
-            if(fit<nutrientes[i+Dpos].second){
-                cout << "[i+Dpos]=" << i+Dpos << endl;
+            if(fit<bestFitness[i+Dpos].second){
+                hCells[i+Dpos].swap(ICells);
+                cCells[i+Dpos].swap(ICells);
+                nutrientes[i+Dpos].second = fit;
+                bestFitness[i+Dpos].second = fit;
+            }else{
                 cCells[i+Dpos].swap(ICells);
                 nutrientes[i+Dpos].second = fit;
             }
@@ -206,8 +211,11 @@ void randomWalk(int cell, int &gc){
         movedCell[i]=cCells[cell][i]+alpha*newCell[i]/(newCell[i]*newCell[i]);//form 16
     }
     fit=fitness(movedCell);
-    if(fit < nutrientes[cell].second){
-        cCells[cell]=movedCell;
-        gc=0;
+    if(fit < bestFitness[cell].second){
+        cCells[cell].swap(movedCell);
+        hCells[cell].swap(movedCell);
+        nutrientes[cell].second = fitness(movedCell);
+        bestFitness[cell].second = fitness(movedCell);
+        gc = 0;
     }
 }

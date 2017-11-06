@@ -7,7 +7,7 @@
 vector<vector<float> >cCells;
 vector<vector<float> >hCells;
 vector<Celula> nutrientes;
-vector<float> bestFitness;	//vector en el que en cada posicion guardamos el valor del mejor fitness encontrado
+vector<Celula> bestFitness;	//vector en el que en cada posicion guardamos el valor del mejor fitness encontrado
 
 
 /**generamos una poblacion 
@@ -20,6 +20,7 @@ void generarPoblacion(int tamPobl, int dim){
     cCells.resize(tamPobl);
     hCells.resize(tamPobl);
     nutrientes.resize(tamPobl);
+    bestFitness.resize(tamPobl);
     
     for(int i=0; i<tamPobl; i++){
         for(int j=0; j<dim; j++){
@@ -32,6 +33,8 @@ void generarPoblacion(int tamPobl, int dim){
 
         nutrientes[i].first=i;      //establecemos el id
         nutrientes[i].second=fitness(filas);   // establecemos el fitness inicial
+        bestFitness[i].first=i;      //establecemos el id
+        bestFitness[i].second=nutrientes[i].second;   //establecemos el mejor fitness de base 
         filas.clear();
         // nutrientes[i].push_back(cell);
     }
@@ -53,10 +56,12 @@ bool actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fe
     float fit;
     fes++;
     bool walk=false;
-    fit=fitness(cCells[id]);
-    if(fit<nutr){
-        bestFitness[id] = fit;
+    fit = fitness(newCell);
+    if(fit<nutr){//si el fitness de la mejor cell es mejor que el actual de dicha cell
+        bestFitness[id].second = fit;
+        nutrientes[id].second=fit;
         hCells[id].swap(newCell);//en hCell guardo el nuevo valor si es mejor
+        cCells[id].swap(newCell);
     }else{
         cCells[id].swap(newCell);
         nutrientes[id].second=fit;  //si no gurdamos el nuevo generado y actualizamos los valores
@@ -144,37 +149,36 @@ vector<float> generarSolucion(int tamCell){
 
 /*devuelve el indice de la primera cell de los nutrientes (ordenados de mejor a peor)*/
 int mejorCelula(){
-    return nutrientes[0].first;
+    sort(bestFitness.begin(), bestFitness.end());
+    return bestFitness[0].first;
 }
 
 float alpha(int fes, int max_fes){
-    float valor=0.0, rnd=0.0;
+    float valor=0.0, rnd;
     rnd=Rand();
     valor=rnd*(fes/max_fes);
     return valor;
 }
 
 float levy(float s){
-    float valor=0.0, w=0.0;
+    float valor=0.0, w;
     w=Randfloat(0,2);
     valor=pow(s, -1-w);
     return valor;
 }
 
 float step(){
-    float valor=0.0, u=0.0, v=0.0, w=0.0, aux=0.0;
+    float valor, v, aux;
     
     aux=sigma();
-    w=Randfloat(0.3,1.99);
-    u=normalDisrt(1.0);
     v=pow(normalDisrt(aux),2);
     
-    valor=u/pow(v,1/w);
+    valor=normalDisrt(1.0)/pow(v,1/Randfloat(0.3,1.99));
     return valor;
 }
 
 float sigma(){//step de las Pcells
-    float w=1.5, valor=0.0;
+    float w=1.5, valor;
 
     valor= pow((tgammaf(1+w)*sin((PI*w)/2) ) / 
             ( tgammaf((1+w)/2)*w*pow(2,(w-1)/2) ),1/w);
@@ -182,18 +186,18 @@ float sigma(){//step de las Pcells
     return valor;
 }
 double beta(){//qCells, para el step size cuando se mueven
-    double normal=0.0; 
-    double rand=0.0, beta=0.0;
+    double normal; 
+    double randi, beta;
     
     normal = normalDisrt(1.0); //Generate numbers;
-    rand=Rand();
-    beta=normal*rand;
+    randi=Rand();
+    beta=normal*randi;
 
     return beta;
 }
 
 double normalDisrt(double second){
-    double valor=0.0;   
+    double valor;   
     std::default_random_engine de(time(0)); //seed
     std::normal_distribution<double> nd(0, second); //mean followed by stdiv
     valor = nd(de); //Generate numbers;
