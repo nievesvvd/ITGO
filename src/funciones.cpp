@@ -133,7 +133,13 @@ float fitness(vector<float> cell){
     return valor;
 }
 /*y las cosas de euler, steps longitud y tal de PCells y de invasive cella*/
-/////////////////////////////TODO/////////////////////////////
+float normalEuclidea(vector<float> cell){
+    float total=0;
+    for(unsigned int i=0; i<cell.size(); i++){
+        total+=pow(cell[i],2);
+    }
+    return sqrt(total);
+}
 
 vector<float> generarSolucion(int tamCell){
     vector<float> newCell;

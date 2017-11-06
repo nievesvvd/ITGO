@@ -26,6 +26,7 @@ vector<float> algoritmoITGO(/*double beta,*/ int dim, int tamPob, int max_fes){
     generarPoblacion(tamPob, dim);//el fitness buscamos el minimo posible
     //cout << "no llega fijo" << endl;
     while(fes<max_fes){
+        // cout << "El valor de fes= " << fes << " y max fes vale: " << max_fes << endl;
         sort(nutrientes.begin(), nutrientes.end());  //ordenamos las celulas segun su nivel de nutrientes de menos a mayor
         sort(bestFitness.begin(), bestFitness.end());    //ordenamos las celulas segun su nivel de nutrientes de menos a mayor
         separarPoblacion(PCells, QCells, DCells, tamPob);//20/60/20
@@ -35,11 +36,11 @@ vector<float> algoritmoITGO(/*double beta,*/ int dim, int tamPob, int max_fes){
 
         // movimientoCelulas(cCells, hCells, nutrientes, gc, bestFitness);
         movePCells(PCells, gc, fes, max_Gc, max_fes);
-        //cout << "pcell" << endl;
+        // cout << "pcell" << endl;
         moveQCells(PCells, QCells, gc, fes, max_Gc, max_fes);
-        //cout << "qcell" << endl;
+        // cout << "qcell" << endl;
         moveDCells(PCells, QCells, DCells, gc, fes, max_Gc);
-        //cout << "dcell" << endl;
+        // cout << "dcell" << endl;
 
         cellInvasivas(tamPob, fes);
       
@@ -64,7 +65,6 @@ void movePCells(int PCells, vector<int> &gc, int &fes, int max_Gc, int max_fes){
     //vuelo.resize(nutrientes.first.size());
     vector<float> newCells;
     newCells.resize(cCells[0].size());
-
     for(int i=0; i<PCells; i++){
         for(unsigned int j=0; j<cCells[0].size(); j++){
             stp=step();
@@ -84,7 +84,7 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, i
     vector<Distancias> distancias;
     float stp=0.0, bta=0.0, mute=0.0;
     int randPCell, proxima1, proxima2;
-    int begin, end;
+    int begin, end/*, porcentaje=0*/;
     bool walk=false;
     vector<float> newCells;
     newCells.resize(cCells[0].size());
@@ -92,7 +92,7 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, i
     //qCell=nutrientes.size()*0.6+pCell;
     begin = PCells;
     end = begin+QCells-1;
-    
+    // cout << "tam es " << cCells[0].size() << " y QCells vale: " << QCells << endl;
     for(int i=0; i<QCells; i++){
         randPCell=Randint(0, (nutrientes.size()*0.2)-1);
         distanciaEuclidea(QCells, distancias, begin, end);
@@ -107,11 +107,11 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, i
             //cout << "Mute:" << mute << endl;
             if(mute > exp(fes/max_fes-1)){
             //se produce la mutacion
-                if(rand()<= 0.5){
+                if(rand()<= 0.5){//seguimos a la hcell
                     newCells[j] = cCells[nutrientes[i+PCells].first][j]+(bta*stp*
                         (hCells[nutrientes[randPCell].first][j]-cCells[nutrientes[i].first][j]) )+
                         (bta*stp*(cCells[nutrientes[proxima1].first][j])-cCells[nutrientes[proxima2].first][j]) ;
-                }else{
+                }else{//o a la ccell
                     newCells[j] = cCells[nutrientes[i+PCells].first][j]+ (bta*stp*
                         ( cCells[nutrientes[randPCell].first][j] - cCells[nutrientes[i+PCells].first][j]) )+
                         (bta*stp*(cCells[nutrientes[proxima1].first][j]- cCells[nutrientes[proxima2].first][j]) );
@@ -119,7 +119,11 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, i
             }
         }
         walk=actualizarCelula(newCells, i+PCells, nutrientes[i+PCells].second, gc[i+PCells], fes, max_Gc);
-        //cout<< "Actualiza cell" << endl;
+    //    cout<< "i vale " << i << endl;
+    //     if (i%60 == 0 and i!=0){
+    //         porcentaje+=10;
+    //         cout<< "Actualizamos cells... " << porcentaje << "%" << endl;
+    //     }
         if(walk){
             randomWalk(i+PCells, gc[i+PCells]);
         }
@@ -164,13 +168,13 @@ void cellInvasivas(int tamPob, int &fes){
     float med=0.0, fit=0.0;
     Dpos = tamPob - tamPob*0.2;//pos de la primera cell del conjunto DCell
     vector<float> newCells, ICells;
-    newCells.resize(nutrientes.size());
+    newCells.resize(cCells[0].size());
     ICells.resize(nutrientes.size());
     for(int i=0; i<tamPob*0.2; i++){ //TODO modificar este for pra que recorr el conjunto de cel apropiado para poder sumar pcell +i
         randPCell=Randint(0, (nutrientes.size()*0.2)-1);
         med=mediaNutrientes(Dpos, tamPob*0.2);
         if(nutrientes[Dpos+i].second<med){
-            newCells=generarSolucion(nutrientes.size());//generamos un vector del tam de las cells
+            newCells = generarSolucion(cCells[0].size()); //generamos un vector del tam de las cells
             for(int j=0; j<nutrientes[0].first; j++){
                 ICells[j] = cCells[nutrientes[randPCell].first][j] +
                 rand()*( newCells[j]-cCells[nutrientes[randPCell].first][j] ); ///!!!!
@@ -195,20 +199,19 @@ void cellInvasivas(int tamPob, int &fes){
 /*
 * cell : cualquier celula de la poblacion
 * gc   : su valor de crecimiento
-* fes  : numero de nutrientes consumidos 
 */
 void randomWalk(int cell, int &gc){
     vector<float> newCell, movedCell;
-    float alpha=0.0, fit;
-    alpha = Randfloat(-1, 1.1);
+    float alpha=Randfloat(-1, 1.1), fit, normal;
 
-    newCell.resize(nutrientes.size());
-    movedCell.resize(nutrientes.size());
+    newCell.resize(cCells[0].size());
+    movedCell.resize(cCells[0].size());
 
-    newCell=generarSolucion(nutrientes.size());
+    newCell=generarSolucion(cCells[0].size());
 
-    for(unsigned int i=0; i<nutrientes.size(); i++){
-        movedCell[i]=cCells[cell][i]+alpha*newCell[i]/(newCell[i]*newCell[i]);//form 16
+    normal=normalEuclidea(cCells[cell]);
+    for(unsigned int i=0; i<cCells[0].size(); i++){
+        movedCell[i]=cCells[cell][i]+alpha*newCell[i]/(newCell[i]*normal);//entre la normal del vector
     }
     fit=fitness(movedCell);
     if(fit < bestFitness[cell].second){

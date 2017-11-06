@@ -63,6 +63,7 @@ float mediaNutrientes(int cellPos, int numCells);
 void distanciaEuclidea(int QCells, vector<Distancias> &distancia, int begin, int end);
 void cellCercanas(int QCells, int &proxima1, int &proxima2, vector<Distancias> distancias);
 float fitness(vector<float> cell);
+float normalEuclidea(vector<float> cell);
 int mejorCelula();
 
 float alpha(int fes, int max_fes);
