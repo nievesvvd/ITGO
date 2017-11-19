@@ -3,7 +3,7 @@
 
 #include "funciones.h"
 
-vector<float> algoritmoITGO(/*double beta,*/ int dim, int tamPob, int max_fes);
+vector<float> algoritmoITGO(/*double beta,*/int fun, int dim, int tamPob, int max_fes);
 
 void movePCells(int PCells, vector<int> &gc, int &fes, int max_Gc, int max_fes);
 void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, int max_fes);

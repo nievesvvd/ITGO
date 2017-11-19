@@ -4,7 +4,7 @@
 
 using namespace std; 
 
-vector<float> algoritmoITGO(/*double beta,*/ int dim, int tamPob, int max_fes){
+vector<float> algoritmoITGO(/*double beta,*/int fun, int dim, int tamPob, int max_fes){
     vector<int> gc;
     vector<float> best;
 
@@ -23,7 +23,7 @@ vector<float> algoritmoITGO(/*double beta,*/ int dim, int tamPob, int max_fes){
     gc.resize(tamPob,0);
     
     //generamos una poblacion de forma aleatoria dado un tam determinado
-    generarPoblacion(tamPob, dim);//el fitness buscamos el minimo posible
+    generarPoblacion(tamPob, dim, fun);//el fitness buscamos el minimo posible
     //cout << "no llega fijo" << endl;
     while(fes<max_fes){
         // cout << "El valor de fes= " << fes << " y max fes vale: " << max_fes << endl;
@@ -69,7 +69,7 @@ void movePCells(int PCells, vector<int> &gc, int &fes, int max_Gc, int max_fes){
         for(unsigned int j=0; j<cCells[0].size(); j++){
             stp=step();
             move=levy(stp);
-            newCells[j]= cCells[nutrientes[i].first][j]+alpha(fes, max_fes)*move;
+            newCells[j]=abs(cCells[nutrientes[i].first][j]+alpha(fes, max_fes)*move );
         }
         walk=actualizarCelula(newCells, i, nutrientes[i].second, gc[i], fes, max_Gc);
         if(walk){
@@ -108,13 +108,13 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, i
             if(mute > exp(fes/max_fes-1)){
             //se produce la mutacion
                 if(rand()<= 0.5){//seguimos a la hcell
-                    newCells[j] = cCells[nutrientes[i+PCells].first][j]+(bta*stp*
+                    newCells[j] = abs(cCells[nutrientes[i+PCells].first][j]+(bta*stp*
                         (hCells[nutrientes[randPCell].first][j]-cCells[nutrientes[i].first][j]) )+
-                        (bta*stp*(cCells[nutrientes[proxima1].first][j])-cCells[nutrientes[proxima2].first][j]) ;
+                        (bta*stp*(cCells[nutrientes[proxima1].first][j])-cCells[nutrientes[proxima2].first][j]) );
                 }else{//o a la ccell
-                    newCells[j] = cCells[nutrientes[i+PCells].first][j]+ (bta*stp*
+                    newCells[j] = abs(cCells[nutrientes[i+PCells].first][j]+ (bta*stp*
                         ( cCells[nutrientes[randPCell].first][j] - cCells[nutrientes[i+PCells].first][j]) )+
-                        (bta*stp*(cCells[nutrientes[proxima1].first][j]- cCells[nutrientes[proxima2].first][j]) );
+                        (bta*stp*(cCells[nutrientes[proxima1].first][j]- cCells[nutrientes[proxima2].first][j]) ) );
                 }
             }
         }
@@ -144,9 +144,9 @@ void moveDCells(int PCells, int QCells, int DCells, vector<int> &gc, int &fes, i
         randPCell=Randint(0, (nutrientes.size()*0.2)-1);
         randQCell=Randint((nutrientes.size()*0.2)-1, (nutrientes.size()*0.6)-1);
         for(unsigned int j=0; j<cCells[0].size(); j++){
-            newCells[j]=cCells[nutrientes[PCells+QCells+i].first][j] + 
+            newCells[j]=abs( cCells[nutrientes[PCells+QCells+i].first][j] + 
             y * (cCells[nutrientes[randPCell].first][j] - cCells[nutrientes[PCells+QCells+i].first][j] ) +
-            y * (cCells[nutrientes[randQCell].first][j] - cCells[nutrientes[PCells+QCells+i].first][j] );
+            y * (cCells[nutrientes[randQCell].first][j] - cCells[nutrientes[PCells+QCells+i].first][j] ) );
         }
         walk=actualizarCelula(newCells, i+PCells+QCells, nutrientes[i+PCells+QCells].second, gc[i+PCells+QCells], fes, max_Gc);
         if(walk){
@@ -176,8 +176,8 @@ void cellInvasivas(int tamPob, int &fes){
         if(nutrientes[Dpos+i].second<med){
             newCells = generarSolucion(cCells[0].size()); //generamos un vector del tam de las cells
             for(int j=0; j<nutrientes[0].first; j++){
-                ICells[j] = cCells[nutrientes[randPCell].first][j] +
-                rand()*( newCells[j]-cCells[nutrientes[randPCell].first][j] ); ///!!!!
+                ICells[j] = abs( cCells[nutrientes[randPCell].first][j] +
+                Rand()*( newCells[j]-cCells[nutrientes[randPCell].first][j] )); 
             }
 
             //actualizarCelula(newCells, i+Dpos, nutrientes.second[i+Dpos] );
@@ -211,14 +211,14 @@ void randomWalk(int cell, int &gc){
 
     normal=normalEuclidea(cCells[cell]);
     for(unsigned int i=0; i<cCells[0].size(); i++){
-        movedCell[i]=cCells[cell][i]+alpha*newCell[i]/(newCell[i]*normal);//entre la normal del vector
+        movedCell[i]=abs(cCells[cell][i]+alpha*newCell[i]/(newCell[i]*normal));//entre la normal del vector
     }
     fit=fitness(movedCell);
-    if(fit < bestFitness[cell].second){
+    // if(fit < bestFitness[cell].second){
         cCells[cell].swap(movedCell);
         hCells[cell].swap(movedCell);
         nutrientes[cell].second = fitness(movedCell);
         bestFitness[cell].second = fitness(movedCell);
         gc = 0;
-    }
+    // }
 }

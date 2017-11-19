@@ -6,7 +6,14 @@
 #include <utility>      //Para el pair
 #include <math.h>         //para el levy fight
 #include "random_ppio.h"
-//#include <random>
+#include <random>
+///parte realea///
+#include <ctime>
+#include <realea/common/srandom.h>
+#include <realea/common/real.h>
+#include <realea/problem/problemcec2005.h>
+#include <realea/common/problem.h>
+///parte realea///
 
 using namespace std;
 
@@ -45,6 +52,8 @@ extern vector<vector<float> >cCells;
 extern vector<vector<float> >hCells;
 extern vector<Celula> nutrientes;
 extern vector<Celula> bestFitness; //vector en el que en cada posicion guardamos el valor del mejor fitness encontrado
+extern int funcion; //numero de la funcion de evaluacion a usar
+extern unsigned long seed; 
 //int Max_Gc=10;
 //**************************** Ayuda para el pair ****************************//
 
@@ -52,11 +61,10 @@ extern vector<Celula> bestFitness; //vector en el que en cada posicion guardamos
 // tam es el tamaño de la poblacion (longitud del vector)
 // poblacion es el numero de individuos que vamos a crear
 **/
-void generarPoblacion(int tamPob, int dim);
+void generarPoblacion(int tamPob, int dim, int fun);
 void separarPoblacion(int &PCells, int &QCells, int &DCells, int tamPob);
 vector<float> generarSolucion(int tamCell);
 //void actualizarPoblacion(vector<int> PCells, vector<int> QCells, vector<int> DCells);
-//vector <Celulas> distanciaEuclidea(vector <Celulas> QCells, Celulas cell); cogemos dos cell aleatorias mejor
 bool actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fes, int max_Gc);
 float mediaNutrientes(int cellPos, int numCells);
 
@@ -69,7 +77,7 @@ int mejorCelula();
 float alpha(int fes, int max_fes);
 float levy(float step);
 float step();
-float sigma();
+float sgma();
 double beta();
 double normalDisrt(double second);
 

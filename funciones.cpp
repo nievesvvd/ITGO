@@ -3,25 +3,31 @@
 #include "funciones.h"
 #include <vector>
 #include <algorithm>
+//desde aqui llamamos a las funciones de realea
+
+using namespace realea;
 
 vector<vector<float> >cCells;
 vector<vector<float> >hCells;
 vector<Celula> nutrientes;
 vector<Celula> bestFitness;	//vector en el que en cada posicion guardamos el valor del mejor fitness encontrado
-
+int funcion;
+unsigned long seed;
 
 /**generamos una poblacion 
 inicial con los nutrientes de cada celula de forma aleatoria entre 0 y 1 
 * siendo 0 el valor de nutrientes mas bajo y 1 el mas alto (es un valor porcentual)
 *inicializaremos aqui las matrices cCells, hCells, los nutrientes de cada una y el mejor fitness
 **/
-void generarPoblacion(int tamPobl, int dim){    
+void generarPoblacion(int tamPobl, int dim, int fun){    
     vector<float> filas;
     cCells.resize(tamPobl);
     hCells.resize(tamPobl);
     nutrientes.resize(tamPobl);
     bestFitness.resize(tamPobl);
-    
+    funcion=fun;//seteamos directamente el numero de funcion a usar
+    seed=Get_random();
+    // cout << "El valor de seed vale: " << seed << endl;
     for(int i=0; i<tamPobl; i++){
         for(int j=0; j<dim; j++){
             filas.push_back(Rand());
@@ -126,11 +132,27 @@ void cellCercanas(int QCells, int &proxima1, int &proxima2, vector<Distancias> d
 /*funcion con la que calculamos el fitness de cada celula*/
 float fitness(vector<float> cell){
     //mientras veo como meto el modulo de dani
-    float valor=0.0;
-    for(unsigned int i=0; i<cell.size(); i++){
-        valor+=pow(cell[i],2);
+    /*---------version 1.0---------*/
+    // float valor=0.0;
+    // for(unsigned int i=0; i<cell.size(); i++){
+    //     valor+=pow(cell[i],2);
+    // }
+    // return valor;
+    /*---------version 1.0---------*/
+
+    /*---------version daniel---------*/
+    int dim = cell.size();
+    tChromosomeReal newCell(dim);
+    
+    for(int i=0; i<dim; i++){//pasamos de nuestra cell a la de la libreria (tipo)
+        newCell[i]=(double)cell[i];
     }
-    return valor;
+    Random random(new SRandom(seed) );
+    ProblemCEC2005 cec2005(&random, dim);
+    ProblemPtr problem = cec2005.get(funcion);
+    tFitness fit = problem->eval(newCell);
+    return (float)fit;
+    /*---------version daniel---------*/
 }
 /*y las cosas de euler, steps longitud y tal de PCells y de invasive cella*/
 float normalEuclidea(vector<float> cell){
@@ -176,14 +198,14 @@ float levy(float s){
 float step(){
     float valor, v, aux;
     
-    aux=sigma();
+    aux=sgma();
     v=pow(normalDisrt(aux),2);
     
     valor=normalDisrt(1.0)/pow(v,1/Randfloat(0.3,1.99));
     return valor;
 }
 
-float sigma(){//step de las Pcells
+float sgma(){//step de las Pcells
     float w=1.5, valor;
 
     valor= pow((tgammaf(1+w)*sin((PI*w)/2) ) / 
