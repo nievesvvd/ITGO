@@ -14,7 +14,9 @@ vector<float> algoritmoITGO(/*double beta,*/int fun, int dim, int tamPob, int ma
 
     int bestCell = 0, actualCell;   //guarda el id de la mejor celula
     int fes=0;
-    int max_Gc=0.7*dim;
+    //int max_Gc=0.7*dim;
+    int max_Gc=10;
+    cout << "EL valor max de gc es:" << max_Gc << endl;
 
     
     
@@ -59,6 +61,7 @@ vector<float> algoritmoITGO(/*double beta,*/int fun, int dim, int tamPob, int ma
 
 /*A continuacion se pondran los metodos de los 4 tipos de celulas*/
 void movePCells(int PCells, vector<int> &gc, int &fes, int max_Gc, int max_fes){
+    //cout << "mueve las pcell" << endl;
     float stp=0.0, move=0.0;
     bool walk=false;
     //pCell=nutrientes.size()*0.2;
@@ -81,6 +84,7 @@ void movePCells(int PCells, vector<int> &gc, int &fes, int max_Gc, int max_fes){
 }
 
 void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, int max_fes){
+    //cout << "mueve las qcell" << endl;
     vector<Distancias> distancias;
     float stp=0.0, bta=0.0, mute=0.0;
     int randPCell, proxima1, proxima2;
@@ -133,6 +137,7 @@ void moveQCells(int PCells, int QCells, vector<int> &gc, int &fes, int max_Gc, i
 }
 
 void moveDCells(int PCells, int QCells, int DCells, vector<int> &gc, int &fes, int max_Gc){
+    //cout << "mueve las dcell" << endl;
     int randPCell, randQCell;
     vector<float> newCells;
     bool walk=false;
@@ -164,25 +169,25 @@ void moveDCells(int PCells, int QCells, int DCells, vector<int> &gc, int &fes, i
 **  Max_Gc es el valor de crecimiento maximo de la celula
 **/
 void cellInvasivas(int tamPob, int &fes){
+    //cout << "mueve las icell" << endl;
     int randPCell, Dpos;
     float med=0.0, fit=0.0;
     Dpos = tamPob - tamPob*0.2;//pos de la primera cell del conjunto DCell
     vector<float> newCells, ICells;
     newCells.resize(cCells[0].size());
-    ICells.resize(nutrientes.size());
+    ICells.resize(cCells[0].size());
     for(int i=0; i<tamPob*0.2; i++){ //TODO modificar este for pra que recorr el conjunto de cel apropiado para poder sumar pcell +i
-        randPCell=Randint(0, (nutrientes.size()*0.2)-1);
+        randPCell = Randint(0, (cCells[0].size() * 0.2) - 1);
         med=mediaNutrientes(Dpos, tamPob*0.2);
         if(nutrientes[Dpos+i].second<med){
             newCells = generarSolucion(cCells[0].size()); //generamos un vector del tam de las cells
-            for(int j=0; j<nutrientes[0].first; j++){
+            for(int j=0; j<cCells[0].size(); j++){
                 ICells[j] = abs( cCells[nutrientes[randPCell].first][j] +
                 Rand()*( newCells[j]-cCells[nutrientes[randPCell].first][j] )); 
             }
 
             //actualizarCelula(newCells, i+Dpos, nutrientes.second[i+Dpos] );
             fit=fitness(ICells);
-            fes++;
             if(fit<bestFitness[i+Dpos].second){
                 hCells[i+Dpos].swap(ICells);
                 cCells[i+Dpos].swap(ICells);
@@ -201,6 +206,7 @@ void cellInvasivas(int tamPob, int &fes){
 * gc   : su valor de crecimiento
 */
 void randomWalk(int cell, int &gc){
+    //cout << "saltitos aleatorios" << endl;
     vector<float> newCell, movedCell;
     float alpha=Randfloat(-1, 1.1), fit, normal;
 

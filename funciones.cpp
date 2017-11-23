@@ -60,7 +60,7 @@ void separarPoblacion(int &PCells, int &QCells, int &DCells, int tamPobl){
 */
 bool actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fes, int max_Gc){
     float fit;
-    fes++;
+    //fes++;
     bool walk=false;
     fit = fitness(newCell);
     if(fit<nutr){//si el fitness de la mejor cell es mejor que el actual de dicha cell
@@ -76,7 +76,6 @@ bool actualizarCelula(vector<float>newCell, int id, float nutr, int &gc, int &fe
     if(gc>max_Gc){
         // randomWalk(cCells[id], gc[id]);
         walk=true;
-        fes++;
     }
     return walk;
 }
